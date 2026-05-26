@@ -1,6 +1,6 @@
 ﻿using GuildaM.Models;
 
-namespace Aventureiro.Models
+namespace AventureiroM.Models
 {
     public abstract class Aventureiro
     {
@@ -18,6 +18,15 @@ namespace Aventureiro.Models
         protected Aventureiro() { }
         public Aventureiro(int id, string nome, int nivel, Guilda guilda)
         {
+            if(string.IsNullOrWhiteSpace(nome))
+                throw new ArgumentException("O Nome do aventureiro não pode ser nulo ou vazio.", nameof(nome));
+
+            if(nivel < 1)
+                throw new ArgumentException("O Nível do aventureiro deve ser pelo menos 1.", nameof(nivel));
+
+            if (guilda != null && nivel < guilda.NivelRequerido)
+                throw new ArgumentException($"O Nível do aventureiro deve ser pelo menos {guilda.NivelRequerido} para ingressar na guilda {guilda.Nome}.", nameof(nivel));
+
             Id = id;
             Nome = nome;
             Nivel = nivel;  

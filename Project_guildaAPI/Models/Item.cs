@@ -18,14 +18,30 @@
 
         protected Item() { }
 
-        public Item(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque)
+        public Item(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao)
         {
+            if(string.IsNullOrWhiteSpace(nome))
+                throw new ArgumentException("O Nome do item não pode ser nulo ou vazio.", nameof(nome));
+
+            if(preco < 0)
+                throw new ArgumentException("O Preço do item não pode ser negativo.", nameof(preco));
+
+            if(estoque < 0)
+                throw new ArgumentException("O Estoque do item não pode ser negativo.", nameof(estoque));
+
+            if(string.IsNullOrWhiteSpace(classeRequerida))
+                throw new ArgumentException("A Classe Requerida do item não pode ser nula ou vazia.", nameof(classeRequerida));
+
+            if(string.IsNullOrWhiteSpace(descricao))
+                throw new ArgumentException("A Descrição do item não pode ser nula ou vazia.", nameof(descricao));
+
             Id = id;
             Nome = nome;
             NivelRequerido = nivelRequerido;
             Preco = preco;
             ClasseRequerida = classeRequerida;
             Estoque = estoque;
+            Descricao = descricao;
         }
     }
 
@@ -37,9 +53,15 @@
 
         protected Equipamento() { }
 
-        public Equipamento(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string tipoDeEquipamento, int atributos)
-            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque)
+        public Equipamento(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string tipoDeEquipamento, int atributos)
+            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
         {
+            if (string.IsNullOrWhiteSpace(tipoDeEquipamento))
+                throw new ArgumentException("O Tipo de Equipamento do item não pode ser nulo ou vazio.", nameof(tipoDeEquipamento));
+
+            if(atributos <= 0)
+                throw new ArgumentException("Os Atributos do equipamento devem ser maiores que zero.", nameof(atributos));
+
             TipoDeEquipamento = tipoDeEquipamento;
             Atributos = atributos;
         }
@@ -54,9 +76,15 @@
 
         protected Consumivel() { }
 
-        public Consumivel(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string efeito, int duracao)
-            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque)
+        public Consumivel(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string efeito, int duracao)
+            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
         {
+            if(string.IsNullOrWhiteSpace(efeito))
+                throw new ArgumentException("O Efeito do item não pode ser nulo ou vazio.", nameof(efeito));
+
+            if(duracao <= 0)
+                throw new ArgumentException("A Duração do efeito do consumível deve ser maior que zero.", nameof(duracao));
+
             Efeito = efeito;
             Duracao = duracao;
         }
@@ -68,9 +96,12 @@
 
         protected Material() { }
 
-        public Material(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string tipoDeMaterial)
-            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque)
+        public Material(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string tipoDeMaterial)
+            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
         {
+            if (string.IsNullOrWhiteSpace(tipoDeMaterial))
+                throw new ArgumentException("O Tipo de Material do item não pode ser nulo ou vazio.", nameof(tipoDeMaterial));
+
             TipoDeMaterial = tipoDeMaterial;
         }
     }
@@ -81,9 +112,12 @@
 
         protected Habilidade() { }
 
-        public Habilidade(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string poder)
-            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque)
+        public Habilidade(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string poder)
+            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
         {
+            if(string.IsNullOrWhiteSpace(poder))
+                throw new ArgumentException("O Poder da habilidade não pode ser nulo ou vazio.", nameof(poder));
+
             Poder = poder;
         }
     }

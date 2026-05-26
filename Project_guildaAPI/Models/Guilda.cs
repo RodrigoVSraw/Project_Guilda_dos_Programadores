@@ -7,5 +7,6 @@
         public int Nivel { get; set; }  
         public int NivelRequerido { get; set; }
         public string Descricao { get; set; }
+
     }
 }
