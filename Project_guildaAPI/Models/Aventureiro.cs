@@ -85,8 +85,8 @@ namespace Aventureiros.Models
         public const int EnergiaInicialBase = 90;
 
         protected Guerreiro() { }
-        public Guerreiro(string nome, Guilda guilda = null)
-            : base(0, nome, 1, guilda)
+        public Guerreiro(string nome, string cargo, Guilda guilda = null)
+            : base(0, nome, 1, guilda, cargo)
         {
             Forca = ForcaInicialBase;
             Vida = VidaInicialBase;
@@ -117,8 +117,8 @@ namespace Aventureiros.Models
 
         protected Mago() { }
 
-        public Mago(string nome, Guilda guilda = null)
-            : base(0, nome, 1, guilda)
+        public Mago(string nome, string cargo, Guilda guilda = null)
+            : base(0, nome, 1, guilda, cargo)
         {
             Forca = ForcaInicialBase;
             Vida = VidaInicialBase;
@@ -148,8 +148,8 @@ namespace Aventureiros.Models
 
         protected Arqueiro() { }
 
-        public Arqueiro(string nome, Guilda guilda = null)
-            : base(0, nome, 1, guilda)
+        public Arqueiro(string nome, string cargo, Guilda guilda = null)
+            : base(0, nome, 1, guilda, cargo)
         {
             Forca = ForcaInicialBase;
             Vida = VidaInicialBase;
@@ -179,8 +179,8 @@ namespace Aventureiros.Models
 
         protected Curandeiro() { }
 
-        public Curandeiro(string nome, Guilda guilda = null)
-            : base(0, nome, 1, guilda)
+        public Curandeiro(string nome, string cargo, Guilda guilda = null)
+            : base(0, nome, 1, guilda, cargo)
         {
             Forca = ForcaInicialBase;
             Vida = VidaInicialBase;
