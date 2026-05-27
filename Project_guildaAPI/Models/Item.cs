@@ -1,4 +1,7 @@
-﻿namespace ItemM.Models
+﻿using Guildas.Models;
+using Aventureiros.Models;
+
+namespace Itens.Models
 {
     public abstract class Item
     {
@@ -59,7 +62,10 @@
             if (string.IsNullOrWhiteSpace(tipoDeEquipamento))
                 throw new ArgumentException("O Tipo de Equipamento do item não pode ser nulo ou vazio.", nameof(tipoDeEquipamento));
 
-            if(atributos <= 0)
+            if(tipoDeEquipamento != "Armadura" && tipoDeEquipamento != "Arma")
+                throw new ArgumentException("O Tipo de Equipamento deve ser 'Armadura' ou 'Arma'.", nameof(tipoDeEquipamento));
+
+            if (atributos <= 0)
                 throw new ArgumentException("Os Atributos do equipamento devem ser maiores que zero.", nameof(atributos));
 
             TipoDeEquipamento = tipoDeEquipamento;
@@ -82,7 +88,7 @@
             if(string.IsNullOrWhiteSpace(efeito))
                 throw new ArgumentException("O Efeito do item não pode ser nulo ou vazio.", nameof(efeito));
 
-            if(duracao <= 0)
+            if (duracao <= 0)
                 throw new ArgumentException("A Duração do efeito do consumível deve ser maior que zero.", nameof(duracao));
 
             Efeito = efeito;
@@ -102,23 +108,34 @@
             if (string.IsNullOrWhiteSpace(tipoDeMaterial))
                 throw new ArgumentException("O Tipo de Material do item não pode ser nulo ou vazio.", nameof(tipoDeMaterial));
 
+            if(tipoDeMaterial != "Comum" && tipoDeMaterial != "Raro" && tipoDeMaterial != "Épico" && tipoDeMaterial != "Lendário")
+                throw new ArgumentException("O Tipo de Material deve ser 'Comum', 'Raro', 'Épico', ou 'Lendário'.", nameof(tipoDeMaterial));
+
             TipoDeMaterial = tipoDeMaterial;
         }
     }
 
     public class Habilidade : Item
     {
-        public string Poder { get; set; }
+        public string TipoDeHabilidade { get; set; }
 
+        public string EfeitoDeHabilidade { get; set; }
         protected Habilidade() { }
 
-        public Habilidade(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string poder)
+        public Habilidade(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string tipoDeHabilidade, string efeitoDeHabilidade)
             : base(id, nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
         {
-            if(string.IsNullOrWhiteSpace(poder))
-                throw new ArgumentException("O Poder da habilidade não pode ser nulo ou vazio.", nameof(poder));
+            if(string.IsNullOrWhiteSpace(tipoDeHabilidade))
+                throw new ArgumentException("O Poder da habilidade não pode ser nulo ou vazio.", nameof(tipoDeHabilidade));
 
-            Poder = poder;
+            if (tipoDeHabilidade != "Ataque" && tipoDeHabilidade != "Defesa" && tipoDeHabilidade != "Suporte")
+                throw new ArgumentException("O Poder da habilidade deve ser 'Ataque', 'Defesa', ou 'Suporte'.", nameof(tipoDeHabilidade));
+
+            if(string.IsNullOrWhiteSpace(efeitoDeHabilidade))
+                throw new ArgumentException("O Efeito da habilidade não pode ser nulo ou vazio.", nameof(efeitoDeHabilidade));
+
+            EfeitoDeHabilidade = efeitoDeHabilidade;
+            TipoDeHabilidade = tipoDeHabilidade;
         }
     }
 }

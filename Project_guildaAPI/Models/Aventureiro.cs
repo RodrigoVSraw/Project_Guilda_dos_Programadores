@@ -1,11 +1,12 @@
-﻿using GuildaM.Models;
+﻿using Guildas.Models;
 
-namespace AventureiroM.Models
+namespace Aventureiros.Models
 {
     public abstract class Aventureiro
     {
         public int Id { get; set; }
         public string Nome { get; set; }
+        public string Cargo { get; set; }
         public int Nivel { get; set; }
         public float Experiencia { get; set; }
         public Guilda Guilda { get; set; }
@@ -13,15 +14,19 @@ namespace AventureiroM.Models
         public int Forca { get; set; }  
         public int Mana { get; set; }
         public int Energia { get; set; }
+        public decimal Ouro { get; set; }
         public string HabilidadeEspecial { get; set; }
 
         protected Aventureiro() { }
-        public Aventureiro(int id, string nome, int nivel, Guilda guilda)
+        public Aventureiro(int id, string nome, int nivel, Guilda guilda, string cargo)
         {
             if(string.IsNullOrWhiteSpace(nome))
                 throw new ArgumentException("O Nome do aventureiro não pode ser nulo ou vazio.", nameof(nome));
 
-            if(nivel < 1)
+            if(string.IsNullOrEmpty(cargo))
+                throw new ArgumentException("O Cargo do aventureiro não pode ser nulo ou vazio.", nameof(cargo));
+
+            if (nivel < 1)
                 throw new ArgumentException("O Nível do aventureiro deve ser pelo menos 1.", nameof(nivel));
 
             if (guilda != null && nivel < guilda.NivelRequerido)
@@ -29,9 +34,11 @@ namespace AventureiroM.Models
 
             Id = id;
             Nome = nome;
+            Cargo = cargo;
             Nivel = nivel;  
             Guilda = guilda;
             Experiencia = 0;
+            Ouro = 0;
         }
 
         public void GanharExperiencia(float xpReceido)
@@ -52,6 +59,14 @@ namespace AventureiroM.Models
 
                 xpNecessaria = Nivel * 100;
             }
+        }
+
+        public void GanharOuro(decimal ouroRecebido)
+        {
+            if (ouroRecebido < 0)
+                throw new ArgumentException("A quantidade de ouro recebida não pode ser negativa.", nameof(ouroRecebido));
+
+            Ouro += ouroRecebido;
         }
 
         protected abstract void AumentarAtributosNivelUp();
