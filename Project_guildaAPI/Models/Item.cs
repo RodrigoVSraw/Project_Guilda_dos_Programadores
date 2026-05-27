@@ -1,5 +1,8 @@
 ﻿using Guildas.Models;
 using Aventureiros.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Itens.Models
 {
