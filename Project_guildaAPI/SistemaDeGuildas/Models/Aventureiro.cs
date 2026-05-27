@@ -1,9 +1,8 @@
-﻿using Guildas.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aventureiros.Models
+namespace SistemaDeGuildas.Models
 {
     public abstract class Aventureiro
     {
@@ -13,6 +12,7 @@ namespace Aventureiros.Models
         public int Nivel { get; set; }
         public float Experiencia { get; set; }
         public Guilda Guilda { get; set; }
+        public string ClasseDeCombate { get; set; }
         public int Vida { get; set; }   
         public int Forca { get; set; }  
         public int Mana { get; set; }
@@ -21,24 +21,18 @@ namespace Aventureiros.Models
         public string HabilidadeEspecial { get; set; }
 
         protected Aventureiro() { }
-        public Aventureiro(int id, string nome, int nivel, Guilda guilda, string cargo)
+        public Aventureiro(int id, string nome, int nivel, Guilda guilda)
         {
             if(string.IsNullOrWhiteSpace(nome))
                 throw new ArgumentException("O Nome do aventureiro não pode ser nulo ou vazio.", nameof(nome));
-
-            if(string.IsNullOrEmpty(cargo))
-                throw new ArgumentException("O Cargo do aventureiro não pode ser nulo ou vazio.", nameof(cargo));
-
-            if (nivel < 1)
-                throw new ArgumentException("O Nível do aventureiro deve ser pelo menos 1.", nameof(nivel));
 
             if (guilda != null && nivel < guilda.NivelRequerido)
                 throw new ArgumentException($"O Nível do aventureiro deve ser pelo menos {guilda.NivelRequerido} para ingressar na guilda {guilda.Nome}.", nameof(nivel));
 
             Id = id;
             Nome = nome;
-            Cargo = cargo;
-            Nivel = nivel;  
+            Cargo = "Membro Comum";
+            Nivel = 1;  
             Guilda = guilda;
             Experiencia = 0;
             Ouro = 0;
@@ -88,9 +82,10 @@ namespace Aventureiros.Models
         public const int EnergiaInicialBase = 90;
 
         protected Guerreiro() { }
-        public Guerreiro(string nome, string cargo, Guilda guilda = null)
-            : base(0, nome, 1, guilda, cargo)
+        public Guerreiro(string nome, Guilda guilda = null)
+            : base(0, nome, 1, guilda)
         {
+            ClasseDeCombate = "Guerreiro";
             Forca = ForcaInicialBase;
             Vida = VidaInicialBase;
             Mana = ManaInicialBase;
@@ -120,9 +115,10 @@ namespace Aventureiros.Models
 
         protected Mago() { }
 
-        public Mago(string nome, string cargo, Guilda guilda = null)
-            : base(0, nome, 1, guilda, cargo)
+        public Mago(string nome, Guilda guilda = null)
+            : base(0, nome, 1, guilda)
         {
+            ClasseDeCombate = "Mago";
             Forca = ForcaInicialBase;
             Vida = VidaInicialBase;
             Mana = ManaInicialBase;
@@ -151,9 +147,10 @@ namespace Aventureiros.Models
 
         protected Arqueiro() { }
 
-        public Arqueiro(string nome, string cargo, Guilda guilda = null)
-            : base(0, nome, 1, guilda, cargo)
+        public Arqueiro(string nome, Guilda guilda = null)
+            : base(0, nome, 1, guilda)
         {
+            ClasseDeCombate = "Arqueiro";
             Forca = ForcaInicialBase;
             Vida = VidaInicialBase;
             Mana = ManaInicialBase;
@@ -182,9 +179,10 @@ namespace Aventureiros.Models
 
         protected Curandeiro() { }
 
-        public Curandeiro(string nome, string cargo, Guilda guilda = null)
-            : base(0, nome, 1, guilda, cargo)
+        public Curandeiro(string nome, Guilda guilda = null)
+            : base(0, nome, 1, guilda)
         {
+            ClasseDeCombate = "Curandeiro";
             Forca = ForcaInicialBase;
             Vida = VidaInicialBase;
             Mana = ManaInicialBase;

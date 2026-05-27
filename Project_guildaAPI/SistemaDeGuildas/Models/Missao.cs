@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Missoes.Models
+namespace SistemaDeGuildas.Models
 {
     public class Missao
     {
@@ -13,6 +13,8 @@ namespace Missoes.Models
         public int ExperienciaRecompensa { get; set; }
 
         public int NivelRecomendado { get; set; }
+
+        public Guilda GuildaResponsavel { get; set; }
 
         protected Missao() { }
 

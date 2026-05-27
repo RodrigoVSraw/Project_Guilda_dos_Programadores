@@ -1,7 +1,8 @@
-﻿using Aventureiros.Models; 
-using Missoes.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Guildas.Models
+namespace SistemaDeGuildas.Models
 {
     public class Guilda
     {
@@ -12,17 +13,14 @@ namespace Guildas.Models
         public int NivelRequerido { get; set; }
         public string Descricao { get; set; }
         public List<Aventureiro> Membros { get; set; } = new List<Aventureiro>();
-        public List<Missao> MissoesDisponiveis { get; set; } = new List<Missao>();
+        public List<Missao> MissoesAceitas { get; set; } = new List<Missao>();
 
         protected Guilda() { }
 
-        public Guilda(int id, string nome, int nivel, int nivelRequerido, string descricao)
+        public Guilda(string nome, int nivelRequerido, string descricao)
         {
             if (string.IsNullOrWhiteSpace(nome))
                 throw new ArgumentException("O Nome da guilda não pode ser nulo ou vazio.", nameof(nome));
-
-            if (nivel < 1)
-                throw new ArgumentException("O Nível da guilda deve ser pelo menos 1.", nameof(nivel));
 
             if (nivelRequerido < 1)
                 throw new ArgumentException("O Nível Requerido da guilda deve ser pelo menos 1.", nameof(nivelRequerido));
@@ -30,9 +28,8 @@ namespace Guildas.Models
             if (string.IsNullOrWhiteSpace(descricao))
                 throw new ArgumentException("A Descrição da guilda não pode ser nula ou vazia.", nameof(descricao));
 
-            Id = id;
             Nome = nome;
-            Nivel = nivel;
+            Nivel = 1;
             NivelRequerido = nivelRequerido;
             Descricao = descricao;
             ExperienciaGuilda = 0;  
@@ -42,10 +39,12 @@ namespace Guildas.Models
         {
             if (aventureiro == null)
                 throw new ArgumentNullException(nameof(aventureiro), "O aventureiro não pode ser nulo.");
+
             if (aventureiro.Nivel < NivelRequerido)
                 throw new ArgumentException($"O aventureiro deve ser pelo menos nível {NivelRequerido} para ingressar na guilda.", nameof(aventureiro));
 
             Membros.Add(aventureiro);
+            aventureiro.Guilda = this;
         }
 
         public void AdicionarMissao(Missao missao)
@@ -53,21 +52,29 @@ namespace Guildas.Models
             if (missao == null)
                 throw new ArgumentNullException(nameof(missao), "A missão não pode ser nula.");
 
-            MissoesDisponiveis.Add(missao);
+            MissoesAceitas.Add(missao);
+
+            missao.GuildaResponsavel = this;
         }
 
         public void RemoverMembro(Aventureiro aventureiro)
         {
             if (aventureiro == null)
                 throw new ArgumentNullException(nameof(aventureiro), "O aventureiro não pode ser nulo.");
+
             Membros.Remove(aventureiro);
+
+            aventureiro.Guilda = null;
         }
 
         public void RemoverMissao(Missao missao)
         {
             if (missao == null)
                 throw new ArgumentNullException(nameof(missao), "A missão não pode ser nula.");
-            MissoesDisponiveis.Remove(missao);
+
+            MissoesAceitas.Remove(missao);
+
+            missao.GuildaResponsavel = null;
         }
 
         public void GanharExperiencia(float xpReceido)
@@ -84,7 +91,6 @@ namespace Guildas.Models
             {
                 Nivel++;
                 ExperienciaGuilda -= xpNecessaria;
-                
 
                 xpNecessaria = Nivel * 1000;
             }

@@ -3,9 +3,9 @@ using SistemaDeGuildas.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Itens.DAO
+namespace Missoes.DAO
 {
-    public class ItemDAO
+    public class MissaoDAO
     {
     }
 }
