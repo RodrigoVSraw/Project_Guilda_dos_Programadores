@@ -110,7 +110,7 @@ namespace Aventureiros.DAO
                         cmd.Parameters.AddWithValue("@ouro", aventureiro.Ouro);
                         cmd.Parameters.AddWithValue("@habilidade_especial", aventureiro.HabilidadeEspecial);
 
-                        await cmd.ExecuteNonQueryAsync();
+                        aventureiro.Id = Convert.ToInt32(await cmd.ExecuteScalarAsync());
                     }
                 }
             }
@@ -120,5 +120,6 @@ namespace Aventureiros.DAO
             }
         }
 
+        // Métodos adicionais para atualizar, excluir ou buscar por ID os Aventureiros podem ser implementados aqui é com você Juan :D
     }
 }
