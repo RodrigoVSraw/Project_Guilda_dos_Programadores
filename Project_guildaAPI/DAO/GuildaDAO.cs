@@ -1,22 +1,14 @@
 ﻿using Npgsql;
 using SistemaDeGuildas.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BuilderConnections.DAO;
 
 namespace GuildasDATA.DAO
 {
     public class GuildaDAO
     {
-        private NpgsqlConnectionStringBuilder connBuilder = new NpgsqlConnectionStringBuilder
-        {
-            Host = "localhost",
-            Port = 5432,
-            Database = "guilda_db",
-            Username = "postgres",
-            Password = "admin",
-
-            SslMode = SslMode.Disable
-        };
 
         public async Task<List<Guilda>> BuscarGuildasAsync()
         {
@@ -24,7 +16,7 @@ namespace GuildasDATA.DAO
 
             try
             {
-                using (var conn = new NpgsqlConnection(connBuilder.ToString()))
+                using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
                     string sql = "SELECT id, nome, nivel, experiencia_da_guilda, nivel_requerido, descricao FROM guildas";
@@ -63,7 +55,7 @@ namespace GuildasDATA.DAO
         {
             try
             {
-                using (var conn = new NpgsqlConnection(connBuilder.ToString()))
+                using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
                     string sql = "INSERT INTO guildas (nome, nivel, experiencia_da_guilda, nivel_requerido, descricao) VALUES (@nome, @nivel, @experiencia_da_guilda, @nivel_requerido, @descricao) RETURNING id";
@@ -83,6 +75,56 @@ namespace GuildasDATA.DAO
             {
                 throw new Exception("Erro ao acessar o banco de dados: " + ex.Message, ex);
             }
+        }
+        public async Task BuscarGuildaPorId(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentOutOfRangeException("O ID da guilda deve ser um número positivo.");
+
+            try
+            {
+                using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
+                {
+                    await conn.OpenAsync();
+                    string sql = "SELECT id, nome, nivel, experiencia_da_guilda, nivel_requerido, descricao FROM guildas WHERE id = @id";
+                    var cmd = new NpgsqlCommand(sql, conn);
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var guilda = new Guilda(
+                                reader.GetString(1),
+                                reader.GetInt32(4),
+                                reader.GetString(5)
+                            );
+
+                            guilda.Id = reader.GetInt32(0);
+                            guilda.Nivel = reader.GetInt32(2);
+                            guilda.ExperienciaGuilda = reader.GetFloat(3);
+                            guilda.Membros = new List<Aventureiro>();
+
+
+                        }
+                    }
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                throw new Exception("Erro ao acessar o banco de dados: " + ex.Message, ex);
+            }
+        }
+        public async Task AtualizarNivelMinimoDaGuilda(int id, int novoNivelRequerido)
+        {
+            if (id <= 0)
+                throw new ArgumentOutOfRangeException("O ID da guilda deve ser um número positivo!");
+            if (novoNivelRequerido <= 0) 
+                throw new ArgumentOutOfRangeException("O nível mínimo de uma guilda de ser pelo menos 1");
+            using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
+            {
+                await conn.OpenAsync();
+                string sql = "UPDATE guildas SET nivel_requerido = @nivel_requerido WHERE id = @id_guilda";
+            }
+            
         }
     }
 }
