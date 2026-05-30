@@ -51,7 +51,7 @@ namespace SistemaDeGuildas.Models
             while (Experiencia >= xpNecessaria)
             {
                 Nivel++;
-                Experiencia -= xpNecessaria; 
+                Experiencia -= xpNecessaria;
                 AumentarAtributosNivelUp();
 
                 xpNecessaria = Nivel * 100;
