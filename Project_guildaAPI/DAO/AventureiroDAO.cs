@@ -3,7 +3,7 @@ using Npgsql;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Aventureiros.DAO
+namespace AventureiroDATA.DAO
 {
     public class AventureiroDAO
     {

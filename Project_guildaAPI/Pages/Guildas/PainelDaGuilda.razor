@@ -1,0 +1,58 @@
+﻿@page "/PainelDaGuilda"
+@page "/PainelDaGuilda/{Id:int}"
+@using SistemaDeGuildas.Models
+@using GuildasDATA.DAO
+@inject GuildaDAO GuildaDao
+
+<div>
+
+	@foreach (var guilda in listaGuildas)
+	{
+		<div class="guilda-card">
+			<h3>@guilda.Nome</h3>
+			<p>Nível: @guilda.Nivel</p>
+			<p>Quantidade de Membros: @guilda.Membros.Count</p>
+			<p>Descrição: @guilda.Descricao</p>
+			<p>Nível Requerido: @guilda.NivelRequerido</p>
+			
+		</div>
+	}
+
+</div>
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	Guilda guildaBuscada;
+	List<Guilda> listaGuildas = new List<Guilda>();
+
+	string pesquisaGuilda = "";
+
+	// Propriedade para filtrar as guildas com base na pesquisa
+	IEnumerable<Guilda> guildasFiltradas
+	{
+		get
+		{
+			// Se a pesquisa estiver vazia, retorna todas as guildas
+			if (string.IsNullOrWhiteSpace(pesquisaGuilda))
+				return listaGuildas;
+		
+			return listaGuildas.Where(g => g.Nome.Contains(pesquisaGuilda, StringComparison.OrdinalIgnoreCase));
+		}
+	}
+	
+	
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (Id != 0)
+		{
+			//guildaBuscada = await GuildaDao.BuscarGuildaPorIdAsync(Id);
+		}
+		
+		listaGuildas = await GuildaDao.BuscarGuildasAsync();
+	}
+	
+
+}

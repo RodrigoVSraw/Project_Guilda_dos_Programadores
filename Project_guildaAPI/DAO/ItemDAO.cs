@@ -3,7 +3,7 @@ using SistemaDeGuildas.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Itens.DAO
+namespace ItensDATA.DAO
 {
     public class ItemDAO
     {

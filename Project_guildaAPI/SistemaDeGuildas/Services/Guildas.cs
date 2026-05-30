@@ -1,7 +1,7 @@
 ﻿using System;
 using SistemaDeGuildas.Models;
 
-namespace Guildas.Services
+namespace SistemaDeGuildas.Services
 {
     public class GuildaService
     {

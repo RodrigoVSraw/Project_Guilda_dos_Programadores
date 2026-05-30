@@ -1,7 +1,7 @@
 ﻿using System;
 using SistemaDeGuildas.Models;
 
-namespace Missoes.Services
+namespace SistemaDeGuildas.Services
 {
     public class MissoesService
     {

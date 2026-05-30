@@ -2,7 +2,7 @@
 using SistemaDeGuildas.Models;
 using Aventureiros.DAO;
 
-namespace AventureirosS.Services
+namespace SistemaDeGuildas.Services
 {
     public class AventureiroS
     {

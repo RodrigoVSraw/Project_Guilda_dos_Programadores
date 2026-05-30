@@ -9,7 +9,7 @@ namespace SistemaDeGuildas.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
-        public decimal OuroRecompensa { get; set; } 
+        public decimal OuroRecompensa { get; set; }
         public int ExperienciaRecompensa { get; set; }
 
         public int NivelRecomendado { get; set; }
@@ -38,6 +38,29 @@ namespace SistemaDeGuildas.Models
             OuroRecompensa = ouroRecompensa;
             ExperienciaRecompensa = experienciaRecompensa;
             NivelRecomendado = nivelRecomendado;
+        }
+
+        public decimal CalcularOuroTotal(Guilda guildaDoAventureiro)
+        {
+
+            if (guildaDoAventureiro == null)
+            {
+                return OuroRecompensa;
+            }
+
+            decimal recompensaBonusGuilda = 1.0m + (guildaDoAventureiro.Nivel * 0.05m);
+            return recompensaBonusGuilda * OuroRecompensa;
+        }
+
+        public decimal CalcularExperienciaTotal(Guilda guildaDoAventureiro)
+        {
+            if (guildaDoAventureiro == null)
+            {
+                return ExperienciaRecompensa;
+            }
+
+            decimal recompensaBonusGuilda = 1.0m + (guildaDoAventureiro.Nivel * 0.10m);
+            return recompensaBonusGuilda * ExperienciaRecompensa;
         }
     }
 }

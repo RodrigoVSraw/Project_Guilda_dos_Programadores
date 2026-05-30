@@ -31,7 +31,7 @@ namespace SistemaDeGuildas.Models
 
             Id = id;
             Nome = nome;
-            Cargo = "Membro Comum";
+            Cargo = "Nenhum";
             Nivel = 1;  
             Guilda = guilda;
             Experiencia = 0;
