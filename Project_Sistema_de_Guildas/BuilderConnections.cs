@@ -11,7 +11,7 @@ namespace BuilderConnections.DAO
             Port = 5432,
             Database = "postgres",
             Username = "postgres",
-            Password = "guildaDosProgramadores",
+            Password = "",
             SslMode = SslMode.Disable,
             Pooling = false,
             MaxPoolSize = 100,
