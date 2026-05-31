@@ -1,6 +1,6 @@
 ﻿using System;
 using SistemaDeGuildas.Models;
-using Aventureiros.DAO;
+using AventureiroDATA.DAO;
 
 namespace SistemaDeGuildas.Services
 {

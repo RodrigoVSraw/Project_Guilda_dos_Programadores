@@ -7,12 +7,12 @@ namespace BuilderConnections.DAO
     {
         private static readonly NpgsqlConnectionStringBuilder connBuilder = new NpgsqlConnectionStringBuilder
         {
-            Host = "localhost",
-            Port = 5432,
-            Database = "guilda_db",
-            Username = "",
+            Host = "",
+            Port = 6543,
+            Database = "postgres",
+            Username = "postgres.",
             Password = "",
-            SslMode = SslMode.Disable,
+            SslMode = SslMode.Require,
             Pooling = false,
             MaxPoolSize = 100,
             ConnectionIdleLifetime = 100
@@ -22,10 +22,6 @@ namespace BuilderConnections.DAO
         {
             return connBuilder.ToString();
         }
-
-
-
-
 
     }
 }

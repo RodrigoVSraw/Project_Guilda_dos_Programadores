@@ -1,4 +1,4 @@
-﻿@page "/perfil-aventureiro/{Id:int}"
+﻿@page "/Aventureiro/Perfil/{Id:int}"
 @using AventureiroDATA.DAO
 @using SistemaDeGuildas.Models
 @inject AventureiroDAO AventureiroDao
@@ -9,7 +9,8 @@
 		<h1>Ficha de Aventureiro: @heroi.Nome</h1>
         <p>Classe: @heroi.ClasseDeCombate</p>
         <p>Nível: @heroi.Nivel</p>
-		<p>Experiência: @heroi.Ouro</p>
+		<p>Experiência:: @heroi.Experiencia XP</p>
+		<p>Ouro: @heroi.Ouro</p>
 
 		<h2>Atributos</h2>
 		<p>HP: @heroi.Vida</p>
@@ -20,7 +21,7 @@
         
         @if (heroi.Guilda != null)
         {
-            <p>Estandarte: @heroi.Guilda.Nome (Nível @heroi.Guilda.Nivel)</p>
+			<a href="/Guilda/Painel/@heroi.Guilda.Id"><p>Estandarte: @heroi.Guilda.Nome (Nível @heroi.Guilda.Nivel)</p></a>
         }
         else
         {
