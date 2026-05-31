@@ -1,0 +1,19 @@
+﻿<div class="top-banner">
+	<div class="banner-text">
+		<h1>@Titulo</h1>
+
+		@if (!string.IsNullOrEmpty(Descricao))
+		{
+			<p>@Descricao</p>
+		}
+	</div>
+</div>
+
+
+@code {
+	[Parameter]
+	public string Titulo { get; set; } = "";
+
+	[Parameter]
+	public string Descricao { get; set; } = "";	
+}

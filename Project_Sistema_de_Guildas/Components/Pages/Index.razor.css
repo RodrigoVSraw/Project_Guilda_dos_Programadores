@@ -1,0 +1,94 @@
+﻿main {
+    padding: 40px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--ouro-velho);
+}
+
+h1 {
+    font-size: 3rem;
+    color: var(--ouro-velho);
+    text-shadow: 2px 2px 5px #000;
+}
+
+.button-explanation-text {
+    font-size: 1.3rem;
+    line-height: 1.2;
+    margin-bottom: 5px;
+    text-align: justify;
+    color: var(--pergaminho);
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--pergaminho);
+}
+
+/* Grid do mural da taverna */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin: 50px 0;
+}
+
+/* Cartões de recado (Pergaminho) */
+.feature-box {
+    background-color: var(--pergaminho);
+    background-image: var(--textura-papel);
+    color: var(--tinta-fresca);
+    padding: 30px 20px;
+    border-radius: 3px 8px 5px 2px;
+    border: 2px solid var(--pergaminho-queimado);
+    text-align: center;
+    box-shadow: 6px 8px 15px rgba(0,0,0,0.8);
+    transition: transform 0.2s ease;
+}
+
+    .feature-box:nth-child(odd) {
+        transform: rotate(-2deg);
+    }
+
+    .feature-box:nth-child(even) {
+        transform: rotate(1.5deg);
+    }
+
+    .feature-box:hover {
+        transform: scale(1.03) rotate(0deg);
+        z-index: 2;
+    }
+
+.feature-icon {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+}
+
+.feature-box h3 {
+    color: var(--sangue-seco);
+    margin-bottom: 15px;
+    font-size: 1.6rem;
+    border-bottom: 1px dashed var(--tinta-fresca);
+    padding-bottom: 10px;
+}
+
+.feature-box p {
+    font-style: italic;
+    margin-bottom: 25px;
+    min-height: 80px;
+}
+
+.closing-note {
+    text-align: center;
+    margin-top: 60px;
+    font-size: 1.3rem;
+    color: var(--ouro-velho);
+    border-top: 1px solid var(--ferro-forjado);
+    padding-top: 20px;
+}

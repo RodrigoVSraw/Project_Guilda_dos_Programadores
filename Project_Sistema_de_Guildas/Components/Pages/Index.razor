@@ -3,12 +3,59 @@
 @using SistemaDeGuildas.Services
 
 <PageTitle>Home - Sistema de Guildas</PageTitle>
-<header>
-	<h1>Bem-vindo ao Sistema de Guildas!</h1>
-</header>
+
+<Banner Titulo="Bem-vindo ao Sistema de Guildas!" Descricao="Aqui nunca faltará nada para suas grandiosas aventuras!" />
 
 <main>
-	<p>Explore as guildas, encontre missões e conecte-se com outros aventureiros!</p>
+    <div>
+	    <p class="intro-text">
+            Saudações, viajante! Eu sou o <strong>Sr. Doninha</strong>, e este é o meu sistema de Registro de Guildas. 
+            Este estabelecimento foi criado com intuito de registrar tanto aventureiros como guildas de maneira centralizada, 
+            além de organizar missões e forncer itens para ajudar em sua evolução ou evolução de seu grupo.
+        </p>
+    
+        <p class="intro-text">
+            No meu empório, fazemos negócio com as guildas mais respeitadas do continente e negociamos relíquias, armas forjadas por anões ferreiros e poções potentes com mercadores do reino dos elfos. Oferecemos as seguintes comodidades:
+        </p>
+            
+        <p class="button-explanation-text">
+            <strong>Pode acessar nossas funcionalidades através do menu lateral, ou clicando nos botões abaixo. Fique à vontade para explorar e encontrar o que precisa para suas aventuras!</strong>
+        </p>
+        <div class="features-grid">
+            <div class="feature-box">
+                <div class="feature-icon">🛡️</div>
+                <h3>O Salão dos Heróis</h3>
+                <p>Navegue pelos nossos registos de aventureiros experientes e recém-chegados em busca de grupos e alianças.</p>
+                <a href="/Aventureiros/Pesquisa" class="btn-acao feature-btn">Ver Heróis</a>
+            </div>
+        
+            <div class="feature-box">
+                <div class="feature-icon">📜</div>
+                <h3>Contratos e Missões</h3>
+                <p>Aventure-se por recompensas valiosas. Escolha entre várias missões, das mais mundanas às de nível de hérois que aparecem em contos, estão afixadas no meu mural.</p>
+                <a href="/" class="btn-acao feature-btn">Ver Contratos</a>
+            </div>
+        
+            <div class="feature-box">
+                <div class="feature-icon">🚩</div>
+                <h3>Estandartes e Guildas</h3>
+                <p>Encontre ou divulgue o nome do seu grupo. Descubra ou junte-se às facções e guildas lendárias deste mundo.</p>
+                <a href="/Guilda/Pesquisa" class="btn-acao feature-btn">Ver Guildas</a>
+            </div>
+        
+            <div class="feature-box">
+                <div class="feature-icon">💎</div>
+                <h3>O Meu Stock de Mercador</h3>
+                <p>Abasteça-se de poções, armas divinas, equipamento e materiais exóticos necessários para sua próxima missão, para se certificar-se de que vai sair vivo.</p>
+                <a href="/" class="btn-acao feature-btn">Ver Loja</a>
+            </div>
+        </div>
+    
+        <div class="closing-note">
+            <p><strong>"O ouro muda de mãos, mas uma boa reputação - e uma lâmina afiada - duram para sempre."</strong><br>- Sr. Doninha</p>
+        </div>
+    </div>
+
 </main>
 	
 

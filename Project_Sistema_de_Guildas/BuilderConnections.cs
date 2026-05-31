@@ -7,10 +7,10 @@ namespace BuilderConnections.DAO
     {
         private static readonly NpgsqlConnectionStringBuilder connBuilder = new NpgsqlConnectionStringBuilder
         {
-            Host = "",
-            Port = 6543,
+            Host = "localhost",
+            Port = 5432,
             Database = "postgres",
-            Username = "postgres.",
+            Username = "postgres",
             Password = "",
             SslMode = SslMode.Require,
             Pooling = false,
