@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Project_guildaAPI\Project_guildaAPI.csproj" />
+    <ProjectReference Include="..\Project_Sistema_de_Guildas\Project_Sistema_de_Guildas.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
 <Solution>
   <Project Path="Console_de_teste/Console_de_teste.csproj" Id="0a46bd4d-7c43-4ff4-b868-791d24346b73" />
-  <Project Path="Project_guildaAPI/Project_guildaAPI.csproj" />
   <Project Path="Project_Sistema_de_Guildas/Project_Sistema_de_Guildas.csproj" Id="ea3db4f8-bf23-43ef-9aae-9ed76635fb60" />
 </Solution>

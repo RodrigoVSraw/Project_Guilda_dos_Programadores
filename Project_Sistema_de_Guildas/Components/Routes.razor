@@ -1,6 +1,15 @@
-﻿<Router AppAssembly="typeof(Program).Assembly" NotFoundPage="typeof(Layout.MainLayout)">
+﻿<Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
-        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(Layout.MainLayout)">
+            <div class="container text-center mt-5">
+                <h1 class="text-danger">404</h1>
+                <p role="alert" class="lead text-muted">Desculpe, não existe nenhuma página neste endereço.</p>
+                <a href="/" class="btn btn-secondary">Ir para o Início</a>
+            </div>
+        </LayoutView>
+    </NotFound>
 </Router>
