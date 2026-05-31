@@ -10,9 +10,11 @@ namespace SistemaDeGuildas.Models
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public decimal OuroRecompensa { get; set; }
-        public int ExperienciaRecompensa { get; set; }
+        public float ExperienciaRecompensa { get; set; }
 
         public int NivelRecomendado { get; set; }
+
+        public Aventureiro AventureiroResponsavel { get; set; }
 
         public Guilda GuildaResponsavel { get; set; }
 
@@ -38,6 +40,8 @@ namespace SistemaDeGuildas.Models
             OuroRecompensa = ouroRecompensa;
             ExperienciaRecompensa = experienciaRecompensa;
             NivelRecomendado = nivelRecomendado;
+            GuildaResponsavel = null;
+            AventureiroResponsavel = null;
         }
 
         public decimal CalcularOuroTotal(Guilda guildaDoAventureiro)
@@ -52,15 +56,37 @@ namespace SistemaDeGuildas.Models
             return recompensaBonusGuilda * OuroRecompensa;
         }
 
-        public decimal CalcularExperienciaTotal(Guilda guildaDoAventureiro)
+        public float CalcularExperienciaTotal(Guilda guildaDoAventureiro)
         {
             if (guildaDoAventureiro == null)
             {
                 return ExperienciaRecompensa;
             }
 
-            decimal recompensaBonusGuilda = 1.0m + (guildaDoAventureiro.Nivel * 0.10m);
+            float recompensaBonusGuilda = 1.0f + (guildaDoAventureiro.Nivel * 0.10f);
             return recompensaBonusGuilda * ExperienciaRecompensa;
+        }
+
+        public void AtribuirResponsavel(Aventureiro aventureiro)
+        {
+            if (AventureiroResponsavel != null)
+                throw new ArgumentException("Essa missão já foi atribuida a um Aventureiro");
+
+            if(GuildaResponsavel != null)
+                throw new ArgumentException("Essa missão já foi atribuida a uma Guilda");
+
+            AventureiroResponsavel = aventureiro;
+        }
+
+        public void AtribuirGuildaResponsavel(Guilda guilda)
+        {
+            if (GuildaResponsavel != null)
+                throw new ArgumentException("Essa missão já foi atribuida a uma Guilda");
+
+            if (AventureiroResponsavel != null)
+                throw new ArgumentException("Essa missão já foi atribuida a um Aventureiro");
+
+            GuildaResponsavel = guilda;
         }
     }
 }

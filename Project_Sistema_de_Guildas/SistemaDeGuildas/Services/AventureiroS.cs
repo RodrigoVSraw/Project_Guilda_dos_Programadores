@@ -47,7 +47,7 @@ namespace SistemaDeGuildas.Services
                 throw new Exception("Aventureiro não encontrado.");
 
 
-            await _aventureiroDAO.EntrarEmUmaGuildaAsync(aventureiro.Id, aventureiro.Guilda.Id);
+            await _aventureiroDAO.EntrarEmUmaGuildaAsync(aventureiro.Id, guildaId);
         }
 
         public async Task SairDeUmaGuildaAsync(int aventureiroId)

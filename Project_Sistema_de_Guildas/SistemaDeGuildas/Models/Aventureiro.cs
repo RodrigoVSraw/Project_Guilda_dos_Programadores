@@ -12,7 +12,6 @@ namespace SistemaDeGuildas.Models
         public int Nivel { get; set; }
         public float Experiencia { get; set; }
         public Guilda Guilda { get; set; }
-        public Missao MissaoAtual { get; set; }
         public string ClasseDeCombate { get; set; }
         public int Vida { get; set; }   
         public int Forca { get; set; }  
@@ -35,7 +34,6 @@ namespace SistemaDeGuildas.Models
             Cargo = "Nenhum";
             Nivel = 1;  
             Guilda = guilda;
-            MissaoAtual = null;
             Experiencia = 0;
             Ouro = 0;
         }

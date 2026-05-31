@@ -1,59 +1,79 @@
 ﻿@page "/Aventureiros/Pesquisa"
+
 @using SistemaDeGuildas.Models
-@using AventureiroDATA.DAO
-@inject AventureiroDAO AventureiroDao
+@using SistemaDeGuildas.Services
+
+@inject AventureiroS AventureiroService
 
 <div>
-    <h2>Salão dos Heróis</h2>
+    <h2 style="color: var(--ouro-velho); text-align: center; margin-bottom: 20px;">O Salão dos Heróis</h2>
 
-    <div>
+    <div style="text-align: center; margin-bottom: 30px;">
         <input type="text"
                @bind="pesquisaAventureiro"
                @bind:event="oninput"
-               placeholder="Buscar aventureiro por nome..."/>
+               class="form-control"
+               style="max-width: 400px; margin: 0 auto; background-color: var(--pergaminho); color: var(--tinta-fresca); border: 2px solid var(--pergaminho-queimado);"
+               placeholder="Buscar aventureiro por nome..." />
     </div>
 
-    <div>
-        
-        @foreach (var aventureiro in aventureirosFiltrados)
-        {
-            <a href="/Aventureiro/Perfil/@aventureiro.Id">
-                <div class="aventureiro-card">
-                    <h3>@aventureiro.Nome</h3>
-                    <p>Classe: @aventureiro.ClasseDeCombate</p>
-                    <p>Nível: @aventureiro.Nivel</p>
-                    <p>Experiência: @aventureiro.Experiencia XP</p>
-                </div>
-            </a>
-        }
+    @if (listaAventureiros == null)
+    {
+        <div class="text-center mt-5">
+            <h3 style="color: var(--ouro-velho);">Aguarde... Os mensageiros estão buscando os registos na guilda.</h3>
+        </div>
+    }
+    else if (listaAventureiros.Count == 0)
+    {
+        <div class="text-center mt-5">
+            <h3 style="color: var(--ouro-velho);">Nenhum aventureiro encontrou coragem para se alistar ainda.</h3>
+        </div>
+    }
+    else
+    {
+        <div class="features-grid">
+            @foreach (var aventureiro in aventureirosFiltrados)
+            {
+                <a href="/Aventureiros/Perfil/@aventureiro.Id" style="text-decoration: none;">
+                    <div class="feature-box">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>@aventureiro.Nome</h3>
+                        <p><strong>Classe:</strong> @aventureiro.ClasseDeCombate</p>
+                        <p><strong>Nível:</strong> @aventureiro.Nivel</p>
+                        <p><strong>Ouro:</strong> $@aventureiro.Ouro</p>
+                    </div>
+                </a>
+            }
+        </div>
 
         @if (!aventureirosFiltrados.Any())
         {
-            <p>Nenhum herói encontrado com o nome "@pesquisaAventureiro".</p>
+            <div class="text-center mt-4">
+                <p style="color: var(--pergaminho); font-size: 1.2rem;">
+                    Nenhum herói encontrado com o nome "<strong>@pesquisaAventureiro</strong>".
+                </p>
+            </div>
         }
-    </div>
+    }
 </div>
 
 @code {
+    private List<Aventureiro> listaAventureiros;
+    private string pesquisaAventureiro = "";
 
-	Aventureiro aventureiroBuscado;
-	List<Aventureiro> listaAventureiros = new List<Aventureiro>();
+    private IEnumerable<Aventureiro> aventureirosFiltrados
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(pesquisaAventureiro))
+                return listaAventureiros;
 
-	string pesquisaAventureiro = "";
+            return listaAventureiros.Where(a => a.Nome.Contains(pesquisaAventureiro, StringComparison.OrdinalIgnoreCase));
+        }
+    }
 
-	IEnumerable<Aventureiro> aventureirosFiltrados
-	{
-		get
-		{
-			if (string.IsNullOrWhiteSpace(pesquisaAventureiro))
-				return listaAventureiros;
-
-			return listaAventureiros.Where(a => a.Nome.Contains(pesquisaAventureiro, StringComparison.OrdinalIgnoreCase));
-		}
-	}
-
-	protected override async Task OnInitializedAsync()
-	{
-		listaAventureiros = await AventureiroDao.BuscarAventureirosAsync();
-	}
+    protected override async Task OnInitializedAsync()
+    {
+        listaAventureiros = await AventureiroService.ListarAventureirosAsync();
+    }
 }

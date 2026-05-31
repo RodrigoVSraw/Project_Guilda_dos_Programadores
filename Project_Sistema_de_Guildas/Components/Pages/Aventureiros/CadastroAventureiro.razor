@@ -1,13 +1,79 @@
 ﻿@page "/Aventureiro/Cadastro"
+@using SistemaDeGuildas.Models
+@using SistemaDeGuildas.Services
 
-<div>
-	<h2>Cadastro de Aventureiro</h2>
-	<input type="text" placeholder="Nome do Aventureiro" />
-	<input type="text" id="Classe" placeholder="Classe de Combate" />
+@inject AventureiroS AventureiroService
 
+<PageTitle>Cadastro de Aventureiro</PageTitle>
+<Banner Titulo="Cadastro de Aventureiro" Descricao="Registre seu perfil de aventureiro aqui!" />
+<div class="container main-content mt-4">
+	<EditForm Model="@novoAventureiro" OnValidSubmit="@SalvarAventureiro" >
+	
+		<div class="mb-3">
+			<label>Nome do Aventureiro: </label>
+			<InputText @bind-Value="novoAventureiro.Nome" class="form-control"/>
+		</div>
 
+		<div class="mb-4">
+			<label>Escolha a Classe de Combate do seu Aventureiro: </label>
+			<InputSelect @bind-Value="classeInserida" class="form-control">
+				<option>Selecione uma Classe...</option>
+				<option value="Guerreiro">Guerreiro</option>
+				<option value="Mago">Mago</option>
+				<option value="Arqueiro">Arqueiro</option>
+				<option value="Curandeiro">Curandeiro</option>
+			</InputSelect>
+		</div>
+
+		@if (!string.IsNullOrWhiteSpace(classeInserida))
+		{
+			<div class="descricao-classe-box mt-2">
+				<strong>O caminho do @classeInserida: </strong>
+				@ObterDescricaoDaClasse()
+			</div>
+		}
+
+		<button type="submit" class="btn-acao mt-3">Registrar Aventureiro</button>
+
+	</EditForm>
 </div>
 
 @code {
 	
+	private string nomeInserido = "";
+	private string classeInserida = "";
+	private Aventureiro novoAventureiro = new Guerreiro("");
+
+	protected async Task SalvarAventureiro()
+	{
+		if (string.IsNullOrWhiteSpace(nomeInserido) || string.IsNullOrWhiteSpace(classeInserida))
+		{
+			return;
+		}
+		switch(classeInserida)
+		{
+			case "Guerreiro": novoAventureiro = new Guerreiro(nomeInserido); break;
+			case "Mago": novoAventureiro = new Mago(nomeInserido); break;
+			case "Arqueiro": novoAventureiro = new Arqueiro(nomeInserido); break;
+			case "Curandeiro": novoAventureiro = new Curandeiro(nomeInserido); break;
+		};
+		
+		await AventureiroService.CadastrarAventureirosAsync(novoAventureiro);
+		
+		nomeInserido = "";
+		classeInserida = "";
+
+	}
+
+	protected string ObterDescricaoDaClasse()
+	{
+		return classeInserida switch
+		{
+			"Guerreiro" => "Mestres do combate corpo a corpo. Possuem alta força física e uma imensa reserva de vida, sendo a muralha ideal para a linha de frente do grupo.",
+			"Mago" => "Estudiosos das antigas artes arcanas. Capazes de dizimar hordas inimigas com feitiços em área usando sua grande reserva de Mana, mas são fisicamente frágeis.",
+			"Arqueiro" => "Especialistas em sobrevivência, possuem stats balanceados. Utilizam sua Energia para realizar disparos letais a longas distâncias antes mesmo de serem vistos.",
+			"Curandeiro" => "O coração de qualquer guilda que deseja voltar viva. Focam em restaurar a vida dos aliados e conceder proteções e bênçãos divinas como suporte.",
+			_ => ""
+		};
+	}
 }

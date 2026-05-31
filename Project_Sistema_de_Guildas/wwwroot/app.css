@@ -280,3 +280,30 @@ body {
     .btn-acao:hover {
         background: linear-gradient(to bottom, #a11f1f, #6e1212);
     }
+
+.descricao-classe-box {
+    background-color: var(--pergaminho);
+    background-image: var(--textura-papel);
+    color: var(--tinta-fresca);
+    border: 1px solid var(--pergaminho-queimado);
+    border-left: 4px solid var(--ouro-velho);
+    border-radius: 2px 6px 6px 2px;
+    padding: 12px 15px;
+    font-size: 0.95rem;
+    font-style: italic;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Pequena animação para o texto surgir suavemente ao trocar de classe */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

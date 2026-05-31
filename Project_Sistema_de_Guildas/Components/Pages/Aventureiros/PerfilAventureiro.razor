@@ -1,7 +1,7 @@
 ﻿@page "/Aventureiro/Perfil/{Id:int}"
-@using AventureiroDATA.DAO
+@using SistemaDeGuildas.Services
 @using SistemaDeGuildas.Models
-@inject AventureiroDAO AventureiroDao
+@inject AventureiroS AventureiroService
 
 <div>
 	@if (heroi != null)
@@ -42,6 +42,6 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		heroi = await AventureiroDao.BuscarAventureiroPorIdAsync(Id);
+		heroi = await AventureiroService.ObterAventureiroPorIdAsync(Id);
 	}
 }
