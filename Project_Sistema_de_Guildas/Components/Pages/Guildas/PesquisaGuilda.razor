@@ -1,0 +1,71 @@
+﻿@page "/Guilda/Pesquisa"
+@using SistemaDeGuildas.Models
+@using GuildasDATA.DAO
+@inject GuildaDAO GuildaDao
+
+<div>
+	<h2>Salão das Guildas</h2>
+
+	<div>
+		<input type="text"
+			   @bind="pesquisaGuilda"
+			   @bind:event="oninput"
+			   placeholder="Buscar guilda por nome..." />
+	</div>
+
+	<div>
+		@foreach (var guilda in guildasFiltradas)
+		{
+			<a href="/Guilda/Painel/@guilda.Id">
+			<div class="guilda-card">
+				<h3>@guilda.Nome</h3>
+				<p>Nível: @guilda.Nivel</p>
+				<p>Quantidade de Membros: @guilda.Membros.Count</p>
+				<p>Descrição: @guilda.Descricao</p>
+				<p>Nível Requerido: @guilda.NivelRequerido</p>
+			</div>
+			</a>
+		}
+
+		@if (!guildasFiltradas.Any())
+		{
+			<p>Nenhuma guilda encontrada com o nome "@pesquisaGuilda".</p>
+		}
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	Guilda guildaBuscada;
+	List<Guilda> listaGuildas = new List<Guilda>();
+
+	string pesquisaGuilda = "";
+
+	IEnumerable<Guilda> guildasFiltradas
+	{
+		get
+		{
+
+			if (string.IsNullOrWhiteSpace(pesquisaGuilda))
+				return listaGuildas;
+
+			return listaGuildas.Where(g => g.Nome.Contains(pesquisaGuilda, StringComparison.OrdinalIgnoreCase));
+		}
+	}
+
+	
+	
+	protected override async Task OnInitializedAsync()
+	{
+		if (Id != 0)
+		{
+			//guildaBuscada = await GuildaDao.BuscarGuildaPorIdAsync(Id);
+		}
+
+		listaGuildas = await GuildaDao.BuscarGuildasAsync();
+	}
+
+	
+}
