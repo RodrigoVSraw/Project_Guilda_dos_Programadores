@@ -3,7 +3,7 @@ using SistemaDeGuildas.Models;
 
 namespace SistemaDeGuildas.Services
 {
-    public class MissoesS
+    public class MissaoS
     {
 
     }

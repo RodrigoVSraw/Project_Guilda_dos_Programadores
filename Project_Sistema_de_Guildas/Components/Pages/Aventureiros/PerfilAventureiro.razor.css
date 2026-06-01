@@ -1,0 +1,132 @@
+﻿/* O quadro principal da ficha */
+.perfil-card {
+    background-color: var(--pergaminho);
+    background-image: var(--textura-papel);
+    border: 3px solid var(--pergaminho-queimado);
+    border-radius: 5px;
+    box-shadow: 10px 15px 25px rgba(0,0,0,0.8);
+    color: var(--tinta-fresca);
+    padding: 35px;
+    position: relative;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.perfil-header {
+    border-bottom: 2px solid var(--tinta-fresca);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Para telas menores */
+    gap: 15px;
+}
+
+    .perfil-header h2 {
+        color: var(--sangue-seco);
+        font-size: 2.2rem;
+        margin: 0;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+/* O crachá da Guilda no topo da ficha */
+.guilda-badge {
+    background: var(--ferro-forjado);
+    color: var(--ouro-velho);
+    padding: 10px 18px;
+    border-radius: 4px;
+    border: 2px solid var(--ouro-velho);
+    font-size: 1.1rem;
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.5);
+}
+
+    .guilda-badge.solitario {
+        background: #2a2a2a;
+        color: #999;
+        border-color: #555;
+    }
+
+.guilda-link {
+    color: #ffd700;
+    text-decoration: underline;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+    .guilda-link:hover {
+        color: #fff;
+    }
+
+/* Textos gerais (Ouro, XP, etc) */
+.status-geral {
+    font-size: 1.3rem;
+    margin-bottom: 40px;
+    line-height: 1.8;
+}
+
+/* Divisória de atributos */
+.atributos-title {
+    text-align: center;
+    color: var(--sangue-seco);
+    border-bottom: 1px dashed var(--tinta-fresca);
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+/* Grelha dos atributos */
+.atributos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+}
+
+/* Cada caixinha de atributo (HP, Mana, etc) */
+.atributo-box {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--pergaminho-queimado);
+    border-radius: 6px;
+    padding: 20px 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+    .atributo-box:hover {
+        transform: translateY(-3px);
+        background: rgba(0, 0, 0, 0.08);
+    }
+
+    .atributo-box .icone {
+        font-size: 2.2rem;
+        margin-bottom: 8px;
+    }
+
+    .atributo-box .nome {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 1rem;
+        color: var(--madeira-pesada);
+    }
+
+    .atributo-box .valor {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--sangue-seco);
+        margin-top: 5px;
+    }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

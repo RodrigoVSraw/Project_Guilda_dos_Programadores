@@ -19,7 +19,7 @@ builder.Services.AddScoped<MissaoDAO>();
 
 builder.Services.AddScoped<AventureiroS>();
 builder.Services.AddScoped<GuildaS>();
-builder.Services.AddScoped<MissoesS>();
+builder.Services.AddScoped<MissaoS>();
 
 var app = builder.Build();
 

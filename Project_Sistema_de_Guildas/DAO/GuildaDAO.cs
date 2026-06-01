@@ -19,7 +19,7 @@ namespace GuildasDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
-                    string sql = "SELECT id, nome, nivel, experiencia_da_guilda, nivel_requerido, descricao FROM guildas";
+                    string sql = "SELECT id, nome, nivel, experiencia, nivelrequerido, descricao FROM guildas";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         using (var reader = await cmd.ExecuteReaderAsync())
@@ -58,13 +58,13 @@ namespace GuildasDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
-                    string sql = "INSERT INTO guildas (nome, nivel, experiencia_da_guilda, nivel_requerido, descricao) VALUES (@nome, @nivel, @experiencia_da_guilda, @nivel_requerido, @descricao) RETURNING id";
+                    string sql = "INSERT INTO guildas (nome, nivel, experiencia, nivelrequerido, descricao) VALUES (@nome, @nivel, @experiencia, @nivelrequerido, @descricao) RETURNING id";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", guilda.Nome);
                         cmd.Parameters.AddWithValue("@nivel", guilda.Nivel);
-                        cmd.Parameters.AddWithValue("@experiencia_da_guilda", guilda.ExperienciaGuilda);
-                        cmd.Parameters.AddWithValue("@nivel_requerido", guilda.NivelRequerido);
+                        cmd.Parameters.AddWithValue("@experiencia", guilda.ExperienciaGuilda);
+                        cmd.Parameters.AddWithValue("@nivelrequerido", guilda.NivelRequerido);
                         cmd.Parameters.AddWithValue("@descricao", guilda.Descricao);
 
                         guilda.Id = Convert.ToInt32(await cmd.ExecuteScalarAsync());
@@ -86,7 +86,7 @@ namespace GuildasDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
-                    string sql = "SELECT id, nome, nivel, experiencia_da_guilda, nivel_requerido, descricao FROM guildas WHERE id = @id";
+                    string sql = "SELECT id, nome, nivel, experiencia, nivelrequerido, descricao FROM guildas WHERE id = @id";
                     var cmd = new NpgsqlCommand(sql, conn);
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -117,12 +117,14 @@ namespace GuildasDATA.DAO
         {
             if (id <= 0)
                 throw new ArgumentOutOfRangeException("O ID da guilda deve ser um número positivo!");
+
             if (novoNivelRequerido <= 0) 
                 throw new ArgumentOutOfRangeException("O nível mínimo de uma guilda de ser pelo menos 1");
+
             using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
             {
                 await conn.OpenAsync();
-                string sql = "UPDATE guildas SET nivel_requerido = @nivel_requerido WHERE id = @id_guilda";
+                string sql = "UPDATE guildas SET nivelrequerido = @nivelrequerido WHERE id = @id_guilda";
             }
             
         }
