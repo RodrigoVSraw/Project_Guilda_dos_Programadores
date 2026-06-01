@@ -48,26 +48,46 @@ namespace ItensDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
-                    string sql = @"SELECT id, nome, nivel_requerido, preco, classe_requerida, estoque, descricao 
+                    string sql = @"SELECT id, nome, nivel_requerido, preco, classe_requerida, tipo_item, estoque, descricao 
                                    FROM itens WHERE estoque > 0";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
 
                         using (var reader = await cmd.ExecuteReaderAsync())
                         {
-                            while (await reader.ReadAsync())
+                            /*while (await reader.ReadAsync())
                             {
-                                
-                                
-                                
-                            }
+                                string nome = reader.GetString(1);
+                                int nivelRequerido = reader.GetInt32(2);
+                                decimal preco = reader.GetDecimal(3);
+                                string classeRequerida = reader.GetString(4);
+                                string tipoItem = reader.GetString(5);
+                                int estoque = reader.GetInt32(6);
+                                string descricao = reader.GetString(7);
+                                Item item;
+                                switch (tipoItem.ToLower())
+                                {
+                                    case "Equipamento":
+                                        item = new Equipamento(nome, nivelRequerido, preco, classeRequerida, estoque, descricao);
+                                        break;
+                                    case "consumivel":
+                                        item = new Consumivel(nome, nivelRequerido, preco, classeRequerida, estoque, descricao);
+                                        break;
+                                    case "material":
+                                        item = new Material(nome, nivelRequerido, preco, classeRequerida, estoque, descricao);
+                                        break;
+                                    case "habilidade":
+                                        item = new Habilidade(nome);
+                                        break;
+                                    default:
+                                        throw new InvalidOperationException($"Tipo de item desconhecido: {tipoItem}");
+                                }
+
+
+
+                            }*/
                         }
                     }
-                    
-                        
-                       
-                    
-                    
                 }
             }catch(NpgsqlException ex)
             {
