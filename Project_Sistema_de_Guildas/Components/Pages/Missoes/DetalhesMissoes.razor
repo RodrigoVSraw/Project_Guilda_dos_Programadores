@@ -1,64 +1,95 @@
 ﻿@page "/Missoes/Detalhes/{Id:int}"
 @using SistemaDeGuildas.Models
 @using SistemaDeGuildas.Services
+
 @inject MissaoS MissaoService
+@rendermode InteractiveServer
 
-<div>
-    @if (missaoDetalhada == null)
-    {
-        <div class="text-center mt-5">
-            <h3 style="color: var(--ouro-velho);">Aguarde... Consultando o mestre...</h3>
-        </div>   
+<PageTitle>Detalhes do Contrato</PageTitle>
 
-    }
-    else
-    {
-        <Banner Titulo="@missaoDetalhada.Nome" Descricao="@($"Descrição: {missaoDetalhada.Descricao} - Recompensa: {missaoDetalhada.OuroRecompensa} - Xp: {missaoDetalhada.ExperienciaRecompensa} - Nível Recomendado: {missaoDetalhada.NivelRecomendado}")" />
-        
-        <div class="container main-content mt-4" style="max-width: 900px; margin 0 auto; padding: 40px;">
-            <div class="missao-card">
-                <div class="missao-header">
-                    <h2>Detalhes da Missão</h2>
-                    @if(missaoDetalhada.AventureiroResponsavel == null && missaoDetalhada.GuildaResponsavel == null)
+@if (missaoDetalhada == null)
+{
+    <div class="text-center mt-5">
+        <h3 style="color: var(--ouro-velho);">Aguarde... Desenrolando o pergaminho...</h3>
+    </div>
+}
+else
+{
+    <Banner Titulo="Contrato de Missão" Descricao="Analise os perigos e recompensas antes de assinar com sangue." />
+
+    <div class="container main-content mt-4" style="max-width: 800px; margin: 0 auto; padding-bottom: 50px;">
+
+        <div class="formulario-card">
+
+            <div class="text-center">
+                <h2 class="form-titulo">@missaoDetalhada.Nome</h2>
+
+                <div class="mt-3 mb-4">
+                    @if (missaoDetalhada.AventureiroResponsavel == null && missaoDetalhada.GuildaResponsavel == null)
                     {
-                        <div class="missao-badge aberta">
-                            <span>🔓 Aberta para Aventureiros ou Guildas</span>
-                        </div>
+                        <span style="background-color: #2d5a2d; color: white; padding: 8px 15px; font-size: 1.1rem; border-radius: 4px; font-weight: bold; box-shadow: 1px 2px 4px rgba(0,0,0,0.3);">
+                            🔓 Aberta para Aventureiros ou Guildas
+                        </span>
                     }
-                    else if(missaoDetalhada.AventureiroResponsavel != null)
+                    else if (missaoDetalhada.AventureiroResponsavel != null)
                     {
-                        <div class="missao-badge em-andamento">
-                            <span>⚔️ Em andamento por: @missaoDetalhada.AventureiroResponsavel.Nome</span>
-                        </div>
+                        <span style="background-color: #8a1919; color: white; padding: 8px 15px; font-size: 1.1rem; border-radius: 4px; font-weight: bold; box-shadow: 1px 2px 4px rgba(0,0,0,0.3);">
+                            ⚔️ Em andamento por: @missaoDetalhada.AventureiroResponsavel.Nome
+                        </span>
                     }
                     else
                     {
-                        <div class="=missao-bagde em-andamento">
-                            <span>⚔️ Em andamento por: @missaoDetalhada.GuildaResponsavel.Nome</span>
-                        </div>
+                        <span style="background-color: #8a1919; color: white; padding: 8px 15px; font-size: 1.1rem; border-radius: 4px; font-weight: bold; box-shadow: 1px 2px 4px rgba(0,0,0,0.3);">
+                            🚩 Em andamento pela guilda: @missaoDetalhada.GuildaResponsavel.Nome
+                        </span>
                     }
                 </div>
-                <div class="missao-body">
-                    <div class="status-geral">
-                        <p><strong>Recompensa:</strong> @missaoDetalhada.OuroRecompensa 💵</p>
-                        <p><strong>Experiencia:</strong> @missaoDetalhada.ExperienciaRecompensa XP</p>
-                        <p><strong>Nivel Recomendado:</strong> @missaoDetalhada.NivelRecomendado</p>
-                    </div>
+
+                <div class="divisor-elegante"></div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h4 style="color: var(--madeira-pesada); font-family: 'Georgia', serif; font-weight: bold; margin-bottom: 10px;">📜 Relato da Caçada:</h4>
+                <p style="font-size: 1.15rem; color: var(--sangue-seco); font-style: italic; background-color: rgba(255, 255, 255, 0.4); padding: 20px; border-radius: 4px; border-left: 4px solid var(--tinta-fresca); line-height: 1.6;">
+                    "@missaoDetalhada.Descricao"
+                </p>
+            </div>
+
+            <div style="display: flex; justify-content: space-around; flex-wrap: wrap; margin-top: 30px; background-color: rgba(0, 0, 0, 0.05); padding: 25px; border-radius: 8px; border: 1px dashed var(--pergaminho-queimado); text-align: center;">
+                <div style="margin-bottom: 10px;">
+                    <h4 style="margin-bottom: 5px; color: var(--madeira-pesada); font-family: 'Georgia', serif;">💰 Ouro</h4>
+                    <span style="font-size: 1.4rem; font-weight: bold; color: #b8860b;">@missaoDetalhada.OuroRecompensa moedas</span>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <h4 style="margin-bottom: 5px; color: var(--madeira-pesada); font-family: 'Georgia', serif;">🌟 Experiência</h4>
+                    <span style="font-size: 1.4rem; font-weight: bold; color: #2d5a2d;">@missaoDetalhada.ExperienciaRecompensa XP</span>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <h4 style="margin-bottom: 5px; color: var(--madeira-pesada); font-family: 'Georgia', serif;">🛡️ Dificuldade</h4>
+                    <span style="font-size: 1.4rem; font-weight: bold; color: var(--sangue-seco);">Nível @missaoDetalhada.NivelRecomendado</span>
                 </div>
             </div>
-        </div>  
-    }
-</div>
 
+            <div class="mt-5 text-center">
+                <a href="/Missao/Pesquisa" class="btn-taverna btn-fundar" style="text-decoration: none;">
+                    ⬅️ Voltar ao Quadro
+                </a>
+            </div>
 
+        </div>
+    </div>
+}
 
 @code {
     [Parameter]
     public int Id { get; set; }
+
     private Missao missaoDetalhada;
+
     protected override async Task OnInitializedAsync()
     {
         missaoDetalhada = await MissaoService.VerMissaoPorId(Id);
     }
-
 }

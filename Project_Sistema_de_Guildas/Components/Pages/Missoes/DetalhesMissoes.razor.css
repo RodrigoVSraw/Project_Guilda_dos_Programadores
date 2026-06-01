@@ -1,0 +1,84 @@
+﻿/* --- O PERGAMINHO PRINCIPAL --- */
+.formulario-card {
+    background-color: #f4e8d3; /* Cor de pergaminho */
+    background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>');
+    border: 3px solid #8b5a2b; /* Borda de madeira/couro */
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 8px 12px 25px rgba(0,0,0,0.6);
+    position: relative;
+    animation: fadeInDown 0.4s ease-out;
+}
+
+/* --- TEXTOS E TÍTULOS --- */
+.form-titulo {
+    color: #8a1919; /* Sangue seco */
+    font-family: 'Georgia', serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.form-subtitulo {
+    color: #2c3e50; /* Tinta fresca */
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+.divisor-elegante {
+    height: 2px;
+    background: linear-gradient(to right, transparent, #8b5a2b, transparent);
+    margin: 20px auto;
+    width: 80%;
+}
+
+/* --- CORES VARIÁVEIS DE TEXTO (Caso não tenha configurado no root) --- */
+:root {
+    --madeira-pesada: #3b2f2f;
+    --sangue-seco: #8a1919;
+    --tinta-fresca: #2c3e50;
+    --pergaminho-queimado: #8b5a2b;
+    --ouro-velho: #cfb53b;
+}
+
+/* --- BOTÕES --- */
+.btn-taverna {
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-fundar {
+    background: linear-gradient(to bottom, #8a1919, #3b0909);
+    color: #cfb53b;
+    border: 2px solid #cfb53b;
+}
+
+    .btn-fundar:hover {
+        background: linear-gradient(to bottom, #a31d1d, #4a0b0b);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 2px 6px 12px rgba(0,0,0,0.6);
+    }
+
+/* Animação suave para a tela carregar */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

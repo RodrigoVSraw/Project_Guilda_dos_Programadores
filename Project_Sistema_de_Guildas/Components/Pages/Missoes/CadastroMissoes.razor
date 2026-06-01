@@ -1,79 +1,137 @@
 ﻿@page "/Missoes/Cadastro"
 @using SistemaDeGuildas.Models
 @using SistemaDeGuildas.Services
-@rendermode InteractiveServer
+
 @inject MissaoS MissaoService
-<PageTitle>Cadastro de Missão</PageTitle>
-<Banner Titulo="Cadastro de Missão" Descricao="Crie uma nova missão aqui!"/>
-<div class="container main-content mt-4" style="max-width: 700px;">
-    <div class="form-cadastro-card">
-        <EditForm Model="@novaMissao" OnInvalidSubmit="@SalvarMissao" FormName="formCriarMissao">
-            
+@inject NavigationManager NavManager
+@rendermode InteractiveServer
 
-            <div class="mb-3">
-                <label>Nome da Missão: </label>
-                <InputText @bind-Value="nomeInserido" class="form-control" />
+<PageTitle>Registro de Contrato</PageTitle>
+
+<Banner Titulo="Quadro de Avisos" Descricao="Preencha um novo contrato de caçada ou resgate para os heróis da região!" />
+
+<div class="container main-content mt-4" style="max-width: 650px; padding-bottom: 50px;">
+
+    <div class="formulario-card">
+
+        @if (mostrarSucesso)
+        {
+            <div class="mensagem-sucesso text-center">
+                <div style="font-size: 4rem; margin-bottom: 15px;">📜🗡️</div>
+                <h2 style="color: #2d5a2d; font-family: 'Georgia', serif;">Contrato Publicado!</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 25px;">Sua missão foi afixada no Quadro e já pode ser aceita por aventureiros corajosos.</p>
+
+                <a href="/Missoes/Pesquisa" class="btn-taverna btn-sucesso">
+                    🍻 Ver Quadro de Missões
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="text-center mb-4">
+                <h2 class="form-titulo">Novo Contrato</h2>
+                <p class="form-subtitulo">Descreva o perigo, estabeleça o preço e aguarde os mercenários.</p>
+                <div class="divisor-elegante"></div>
             </div>
 
+            <EditForm Model="@modeloFormulario" OnValidSubmit="SalvarMissao" FormName="formCriarMissao">
 
-            <div>
-                <label>Descrição da Missão: </label>
-                <InputText @bind-Value="descricaoInserida" class="form-control"/>
-            </div>
+                <div class="form-group">
+                    <label class="form-label">Título da Missão:</label>
+                    <InputText @bind-Value="modeloFormulario.Nome" class="form-control input-taverna" placeholder="Ex: Limpar a Caverna dos Goblins..." />
+                </div>
 
+                <div class="form-group">
+                    <label class="form-label">Descrição e Detalhes:</label>
+                    <InputTextArea @bind-Value="modeloFormulario.Descricao" class="form-control input-taverna text-area-taverna" placeholder="Onde fica? O que deve ser feito? Quais são as feras?" rows="4" />
+                </div>
 
-            <div>
-                <label>Recompensa em Ouro: </label>
-                <InputNumber @bind-Value="recompensaInserida" class="form-control" />
-            </div>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label class="form-label">Recompensa (Ouro 💰):</label>
+                        <InputNumber @bind-Value="modeloFormulario.Ouro" class="form-control input-taverna" min="1" />
+                    </div>
 
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label class="form-label">Recompensa (XP 🌟):</label>
+                        <InputNumber @bind-Value="modeloFormulario.Experiencia" class="form-control input-taverna" min="1" />
+                    </div>
+                </div>
 
-            <div>
-                <label>Recompensa em Experiência: </label>
-                <InputNumber @bind-Value="experienciaInserida" class="form-control" />
-            </div>
+                <div class="form-group">
+                    <label class="form-label">Nível Recomendado do Herói:</label>
+                    <InputNumber @bind-Value="modeloFormulario.NivelRecomendado" class="form-control input-taverna" min="1" style="max-width: 150px;" />
+                </div>
 
+                @if (!string.IsNullOrEmpty(mensagemErro))
+                {
+                    <div class="mensagem-erro text-center mt-3">
+                        <strong>Aviso:</strong> @mensagemErro
+                    </div>
+                }
 
-            <div>
-                <label>Nível Recomendado: </label>
-                <InputNumber @bind-Value="nivelRecomendadoInserido" class="form-control" />
-            </div>
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn-taverna btn-fundar">
+                        📌 Afixar no Quadro
+                    </button>
+                </div>
 
-
-            <button type="submit" class="btn-acao mt-3">Criar Missão</button>
-
-        </EditForm>
+            </EditForm>
+        }
     </div>
 </div>
 
-
-
 @code {
-    private string nomeInserido = "";
-    private string descricaoInserida = "";
-    private decimal recompensaInserida = 0m;
-    private float experienciaInserida = 0f;
-    private int nivelRecomendadoInserido = 0;
-    private Missao novaMissao = new Missao("", "", 0, 0, 0);
+    private class FormularioMissao
+    {
+        public string Nome { get; set; } = "";
+        public string Descricao { get; set; } = "";
+        public decimal Ouro { get; set; } = 100m; 
+        public int Experiencia { get; set; } = 50;
+        public int NivelRecomendado { get; set; } = 1;
+    }
+
+    private FormularioMissao modeloFormulario = new FormularioMissao();
+    private bool mostrarSucesso = false;
+    private string mensagemErro = "";
 
     protected async Task SalvarMissao()
     {
-        if (string.IsNullOrWhiteSpace(nomeInserido) || string.IsNullOrWhiteSpace(descricaoInserida) || recompensaInserida <= 0 || experienciaInserida <= 0 || nivelRecomendadoInserido <= 0)
+        mensagemErro = "";
+
+        // Validações da Taverna
+        if (string.IsNullOrWhiteSpace(modeloFormulario.Nome) || string.IsNullOrWhiteSpace(modeloFormulario.Descricao))
         {
+            mensagemErro = "A missão precisa de um título e uma descrição clara!";
             return;
         }
-        novaMissao.Nome = nomeInserido;
-        novaMissao.Descricao = descricaoInserida;
-        novaMissao.OuroRecompensa = recompensaInserida;
-        novaMissao.ExperienciaRecompensa = experienciaInserida;
-        novaMissao.NivelRecomendado = nivelRecomendadoInserido;
-        await MissaoService.CriarMissao(novaMissao);
 
-        nomeInserido = "";
-        descricaoInserida = "";
-        recompensaInserida = 0m;
-        experienciaInserida = 0f;
-        nivelRecomendadoInserido = 0;
-        
+        if (modeloFormulario.Ouro <= 0 || modeloFormulario.Experiencia <= 0)
+        {
+            mensagemErro = "Mercenários não trabalham de graça! As recompensas devem ser positivas.";
+            return;
+        }
+
+        try
+        {
+            // Substitua os parâmetros se a ordem no construtor da sua classe Missao for diferente!
+            Missao novaMissao = new Missao(
+                modeloFormulario.Nome,
+                modeloFormulario.Descricao,
+                modeloFormulario.Ouro,
+                modeloFormulario.Experiencia,
+                modeloFormulario.NivelRecomendado
+               
+            );
+
+            await MissaoService.CriarMissao(novaMissao);
+
+            // Troca o formulário pela mensagem de sucesso!
+            mostrarSucesso = true;
+        }
+        catch (Exception ex)
+        {
+            mensagemErro = $"Erro ao pregar o contrato: {ex.Message}";
+        }
     }
 }

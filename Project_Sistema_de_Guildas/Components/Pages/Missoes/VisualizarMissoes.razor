@@ -1,32 +1,46 @@
 ﻿@page "/Missao/Pesquisa"
 @using SistemaDeGuildas.Models
 @using SistemaDeGuildas.Services
+
 @inject MissaoS MissaoService
+@inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
 
-<PageTitle>Visualizar Missões</PageTitle>
+<PageTitle>Quadro de Contratos</PageTitle>
 
-<Banner Titulo="Visualizar Missões" Descricao="Explore todas as missões disponíveis!" />
+<Banner Titulo="Quadro de Contratos" Descricao="Explore todas as missões disponíveis para os heróis da região!" />
+
 <div>
-
     <div class="search-bar-container">
         <input type="text"
-            @bind="pesquisaMissao"
-            @bind:event="oninput"
-            class="form-control input-pesquisa"
-            placeholder="Buscar missão por nome..."/>
+               @bind="pesquisaMissao"
+               @bind:event="oninput"
+               class="form-control input-pesquisa"
+               placeholder="Buscar missão por nome..." />
 
         <a href="/Missoes/Cadastro" class="btn-acao-lateral">
             ➕ Criar Missão
         </a>
     </div>
 
+    @if (!string.IsNullOrEmpty(mensagemAviso))
+    {
+        <div class="text-center mb-4" style="background-color: rgba(138, 25, 25, 0.1); color: #8a1919; border: 1px dashed #8a1919; padding: 10px; border-radius: 4px; margin-top: 15px;">
+            <strong>Atenção:</strong> @mensagemAviso
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(mensagemSucesso))
+    {
+        <div class="text-center mb-4" style="background-color: rgba(45, 90, 45, 0.1); color: #2d5a2d; border: 1px dashed #2d5a2d; padding: 10px; border-radius: 4px; margin-top: 15px;">
+            <strong>Sucesso:</strong> @mensagemSucesso
+        </div>
+    }
+
     @if (listaMissoes == null)
     {
         <div class="text-center mt-5">
-            <h3 style="color: var(--ouro-velho);">Aguarde... Os mensageiros estão buscando os registros de missões</h3>
+            <h3 style="color: var(--ouro-velho);">Aguarde... Os mensageiros estão buscando os registros de missões.</h3>
         </div>
-
     }
     else if (listaMissoes.Count == 0)
     {
@@ -39,17 +53,28 @@
         <div class="features-grid">
             @foreach (var missao in missoesFiltradas)
             {
-                <a href="/Missoes/Detalhes/@missao.Id" style="text-decoration: none">
-                    <div class="feature-box">
-                        <div class="feature-icon"></div>
+                <div class="feature-box" style="position:relative">
+
+                    <button class="btn-deletar-cartao" title="Rasgar Contrato"
+                            @onclick="() => DeletarMissao(missao.Id)"
+                            @onclick:stopPropagation="true">
+                        ❌
+                    </button>
+
+                    <a href="/Missoes/Detalhes/@missao.Id" style="text-decoration: none; color: inherit; display: block;">
+
+                        <div class="feature-icon">📜</div>
                         <h3>@missao.Nome</h3>
-                        <p><strong>Descrição:</strong> @missao.Descricao</p>
-                        <p><strong>Ouro:</strong>@missao.OuroRecompensa</p>
-                        <p><strong>Xp:</strong>@missao.ExperienciaRecompensa</p>
-                    </div>    
 
+                        <p style="font-size: 0.95rem; color: var(--sangue-seco); font-style: italic; border-bottom: 1px dashed var(--tinta-fresca); padding-bottom: 10px; margin-bottom: 10px;">
+                            "@missao.Descricao"
+                        </p>
 
-                </a>
+                        <p><strong>Ouro:</strong> @missao.OuroRecompensa 💰</p>
+                        <p><strong>XP:</strong> @missao.ExperienciaRecompensa 🌟</p>
+                        <p><strong>Nível Recomendado:</strong> @missao.NivelRecomendado</p>
+                    </a>
+                </div>
             }
         </div>
 
@@ -62,22 +87,14 @@
             </div>
         }
     }
-
 </div>
-
-
-
-
-
-
-
-
-
-
 
 @code {
     private List<Missao> listaMissoes;
     private string pesquisaMissao = "";
+
+    private string mensagemAviso = "";
+    private string mensagemSucesso = "";
 
     private IEnumerable<Missao> missoesFiltradas
     {
@@ -87,11 +104,36 @@
                 return listaMissoes;
 
             return listaMissoes.Where(m => m.Nome.Contains(pesquisaMissao, StringComparison.OrdinalIgnoreCase));
-
         }
     }
+
     protected override async Task OnInitializedAsync()
     {
         listaMissoes = await MissaoService.VerTodasAsMissoes();
+    }
+
+    private async Task DeletarMissao(int id)
+    {
+        mensagemAviso = "";
+        mensagemSucesso = "";
+
+        bool confirmado = await JSRuntime.InvokeAsync<bool>("confirm", "Tem certeza que deseja rasgar este contrato e removê-lo do quadro?");
+
+        if (confirmado)
+        {
+            try
+            {
+                await MissaoService.ExcluirMissao(id);
+
+                listaMissoes.RemoveAll(m => m.Id == id);
+                mensagemSucesso = "Contrato rasgado com sucesso!";
+
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                mensagemAviso = $"Não foi possível remover o contrato: {ex.Message}";
+            }
+        }
     }
 }
