@@ -10,8 +10,8 @@ namespace BuilderConnections.DAO
             Host = "aws-1-sa-east-1.pooler.supabase.com",
             Port = 6543,
             Database = "postgres",
-            Username = "",
-            Password = "",
+            Username = "app_repository.lnvcvnpjifmqmtfifoqy",
+            Password = "guildaDosProgramadores",
 
             SslMode = SslMode.Disable,
             Pooling = false,

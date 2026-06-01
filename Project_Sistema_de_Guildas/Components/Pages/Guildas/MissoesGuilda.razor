@@ -1,9 +1,79 @@
-﻿@page "/Guilda/Missoes/{Id:int}"	
+﻿@page "/Guilda/Missoes/{Id:int}"
+@using SistemaDeGuildas.Models
+@using SistemaDeGuildas.Services
+@inject MissaoS MissaoService
+@rendermode InteractiveServer
 
 
-<h3>MissoesGuilda</h3>
+<Banner Titulo="Visualizar Missões" Descricao="Explore todas as missões da nossa guilda!" />
+<h3>Missões da Guilda</h3>
+<div>
+        @if (listaMissoes == null)
+        {
+            <div class="text-center mt-5">
+                <h3 style="color: var(--ouro-velho);">
+                    Aguarde... Os mensageiros estão buscando as missões
+                </h3>
+            </div>
+        }
+        else if (!missoesFiltradas.Any())
+        {
+            <div class="text-center mt-5">
+                <h3 style="color: var(--ouro-velho);">
+                    Nenhuma missão encontrada.
+                </h3>
+
+                @if (!string.IsNullOrWhiteSpace(pesquisaMissao))
+                {
+                    <p style="color: var(--pergaminho);">
+                        Nenhuma missão com o nome "<strong>@pesquisaMissao</strong>"
+                    </p>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="features-grid">
+                @foreach (var missao in missoesFiltradas)
+                {
+                    <a href="/Missoes/Detalhes/@missao.Id" style="text-decoration: none">
+                        <div class="feature-box">
+                            <div class="feature-icon"></div>
+
+                            <h3>@missao.Nome</h3>
+
+                            <p><strong>Descrição:</strong> @missao.Descricao</p>
+                            <p><strong>Ouro:</strong> @missao.OuroRecompensa</p>
+                            <p><strong>XP:</strong> @missao.ExperienciaRecompensa</p>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+</div>
 
 @code {
-	[Parameter]
-	public int Id { get; set; }
+    [Parameter]
+    public int Id { get; set; }
+
+    private List<Missao> listaMissoes = new();
+    private string pesquisaMissao = string.Empty;
+
+    private IEnumerable<Missao> missoesFiltradas
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(pesquisaMissao))
+                return listaMissoes;
+
+            return listaMissoes.Where(m =>
+                m.Nome.Contains(pesquisaMissao, StringComparison.OrdinalIgnoreCase));
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaMissoes = await MissaoService.VerMissaoDaGuilda(Id);
+    }
 }
+

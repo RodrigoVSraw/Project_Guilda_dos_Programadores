@@ -1,9 +1,10 @@
-﻿using Npgsql;
-using System;
+﻿using BuilderConnections.DAO;
+using Npgsql;
 using SistemaDeGuildas.Models;
+using SistemaDeGuildas.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BuilderConnections.DAO;
 
 namespace MissoesDATA.DAO
 {
@@ -134,16 +135,20 @@ namespace MissoesDATA.DAO
                         cmd.Parameters.AddWithValue("id", id);
                         using (var reader = await cmd.ExecuteReaderAsync())
                         {
-                            var missao = new Missao
-                                (
+                            while (await reader.ReadAsync())
+                            {
+                                var missao = new Missao(
                                     reader.GetString(1),
                                     reader.GetString(2),
                                     reader.GetDecimal(3),
                                     reader.GetInt32(4),
                                     reader.GetInt32(5)
                                 );
-                            missao.Id = reader.GetInt32(0);
-                            missoesAventureiro.Add(missao);
+
+                                missao.Id = reader.GetInt32(0);
+
+                                missoesAventureiro.Add(missao);
+                            }
                         }
                     }
                 }
@@ -170,16 +175,20 @@ namespace MissoesDATA.DAO
                         cmd.Parameters.AddWithValue("id", id);
                         using (var reader = await cmd.ExecuteReaderAsync())
                         {
-                            var missao = new Missao
-                                (
+                            while (await reader.ReadAsync())
+                            {
+                                var missao = new Missao(
                                     reader.GetString(1),
                                     reader.GetString(2),
                                     reader.GetDecimal(3),
                                     reader.GetInt32(4),
                                     reader.GetInt32(5)
                                 );
-                            missao.Id = reader.GetInt32(0);
-                            missoesGuilda.Add(missao);
+
+                                missao.Id = reader.GetInt32(0);
+
+                                missoesGuilda.Add(missao);
+                            }
                         }
                     }
                 }
