@@ -1,26 +1,177 @@
 ﻿@page "/Guilda/Painel/{Id:int}"
 @using SistemaDeGuildas.Models
-@using GuildasDATA.DAO
-@inject GuildaDAO GuildaDao
+@using SistemaDeGuildas.Services
+@inject GuildaS GuildaService
+@inject AventureiroS AventureiroService
+@rendermode InteractiveServer
 
-<div>
-		<div class="guilda-card">
-			<h3>@painelG.Nome</h3>
-			<p>Nível: @painelG.Nivel</p>
-			<a href="/Guilda/Membros"><p>Quantidade de Membros: @painelG.Membros.Count</p></a>
-			<p>Descrição: @painelG.Descricao</p>
-			<p>Nível Requerido: @painelG.NivelRequerido</p>	
-		</div>
+<PageTitle>Painel da Guilda</PageTitle>
+
+<Banner Titulo="Painel da Guilda" Descricao="Confira os detalhes e registros da guilda aqui!" />
+
+<div class="container main-content mt-4" style="max-width: 800px; padding-bottom: 50px;">
+
+    @if (painelG == null)
+    {
+        <div class="text-center mt-5">
+            <h3 style="color: var(--ouro-velho);">Aguarde... Desfraldando o estandarte da guilda...</h3>
+        </div>
+    }
+    else
+    {
+        <div class="painel-guilda-card">
+
+            <div class="painel-header text-center">
+                <div class="icone-estandarte">🚩</div>
+                <h1 class="nome-guilda">@painelG.Nome</h1>
+                <div class="divisor-elegante"></div>
+            </div>
+
+            <div class="painel-corpo">
+
+                <div class="status-destaque">
+                    <div class="status-item">
+                        <span class="label">Nível da Guilda</span>
+                        <span class="valor">@painelG.Nivel</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">Nível Mínimo para Entrar</span>
+                        <span class="valor">@painelG.NivelRequerido</span>
+                    </div>
+                </div>
+
+                <div class="descricao-box">
+                    <h4>Sobre a Guilda:</h4>
+                    <p>"@painelG.Descricao"</p>
+                </div>
+
+                <div class="membros-secao text-center mt-5">
+                    <p class="membros-info">Esta guilda abriga <strong>@(painelG.Membros?.Count ?? 0)</strong> aventureiro(s) valente(s).</p>
+
+                    
+                    <div class="botoes-acao-guilda">
+                        <a href="/Guilda/Membros/@painelG.Id" class="btn-painel">
+                            👥 Inspecionar Membros
+                        </a>
+
+                   
+                        <a href="/Guilda/Missoes/@painelG.Id" class="btn-painel">
+                            📜 Quadro de Missões
+                        </a>
+
+                        <button class="btn-painel btn-inscrever" @onclick="AlternarFormulario">
+                            ✍️ Juntar-se à Guilda
+                        </button>
+                    </div>
+
+                    @if (mostrandoFormulario)
+                    {
+                        <div class="formulario-inscricao mt-4">
+                            <h4 style="color: var(--sangue-seco); font-family: 'Georgia', serif; font-weight: bold;">Assinar o Livro da Guilda</h4>
+                            <p style="color: var(--tinta-fresca); margin-bottom: 15px;">Digite seu nome exato de aventureiro para se alistar:</p>
+
+                            <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+                                <input type="text" @bind="nomeInscricao" class="form-control input-taverna" placeholder="Seu nome de aventureiro..." style="max-width: 250px; background-color: rgba(255,255,255,0.5); border: 2px solid var(--pergaminho-queimado);" />
+
+                                <button class="btn-confirmar-inscricao" @onclick="ConfirmarInscricao">
+                                    Assinar
+                                </button>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(mensagemAviso))
+                            {
+                                <p style="color: #8a1919; font-weight: bold; margin-top: 15px;">@mensagemAviso</p>
+                            }
+                            @if (!string.IsNullOrEmpty(mensagemSucesso))
+                            {
+                                <p style="color: #2d5a2d; font-weight: bold; margin-top: 15px;">@mensagemSucesso</p>
+                            }
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    }
 </div>
 
 @code {
-	[Parameter]
-	public int Id { get; set; }
+    [Parameter]
+    public int Id { get; set; }
 
-	Guilda painelG;
+    private Guilda painelG;
 
-	protected override async Task OnInitializedAsync()
-	{	
-			//painelG = await GuildaDao.BuscarGuildaPorIdAsync(Id);
-	}
+    // Variáveis de controle do formulário
+    private bool mostrandoFormulario = false;
+    private string nomeInscricao = "";
+    private string mensagemAviso = "";
+    private string mensagemSucesso = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        painelG = await GuildaService.ObterGuildaPorIdAsync(Id);
+    }
+
+    private void AlternarFormulario()
+    {
+        mostrandoFormulario = !mostrandoFormulario;
+        mensagemAviso = "";
+        mensagemSucesso = "";
+        nomeInscricao = "";
+    }
+
+    private async Task ConfirmarInscricao()
+    {
+        mensagemAviso = "";
+        mensagemSucesso = "";
+
+        if (string.IsNullOrWhiteSpace(nomeInscricao))
+        {
+            mensagemAviso = "Você precisa escrever o seu nome no contrato!";
+            return;
+        }
+
+        var todosAventureiros = await AventureiroService.ListarAventureirosAsync();
+        var aventureiroEncontrado = todosAventureiros.FirstOrDefault(a => a.Nome.Equals(nomeInscricao, StringComparison.OrdinalIgnoreCase));
+
+        if (aventureiroEncontrado == null)
+        {
+            mensagemAviso = "Aventureiro não encontrado! Visite o Salão dos Heróis para se cadastrar primeiro.";
+            return;
+        }
+
+        if (painelG.Membros == null)
+            painelG.Membros = new List<Aventureiro>();
+
+        
+
+        if (painelG.Membros.Any(m => m.Id == aventureiroEncontrado.Id))
+        {
+            mensagemAviso = "Você já faz parte desta guilda, aventureiro!";
+            return;
+        }
+
+        
+        try
+        {
+            
+            await AventureiroService.EntrarEmUmaGuildaAsync(aventureiroEncontrado.Id, painelG.Id);
+
+            
+            painelG.Membros.Add(aventureiroEncontrado);
+            mensagemSucesso = $"Bem-vindo(a) à guilda, {aventureiroEncontrado.Nome}!";
+            nomeInscricao = "";
+        }
+        catch (InvalidOperationException ex)
+        {
+            
+            mensagemAviso = ex.Message;
+        }
+        catch (Exception)
+        {
+            
+            mensagemAviso = "Os registros da taverna falharam. Tente assinar o livro novamente.";
+        }
+    }
+    }
 }

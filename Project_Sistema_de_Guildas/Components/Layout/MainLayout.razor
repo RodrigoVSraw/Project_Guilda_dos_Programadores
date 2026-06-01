@@ -1,10 +1,52 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="app-layout">
- 
+
     <NavMenu />
 
-    <div class="main-content">
-        @Body
-    </div>
-</div>
+    <main>
+        <article class="content px-4">
+
+            <ErrorBoundary @ref="escudoDeErros">
+
+                <ChildContent>
+                    @Body
+                </ChildContent>
+
+                <ErrorContent Context="excecao">
+                    <div class="container main-content mt-5" style="max-width: 600px; text-align: center;">
+                        <div style="background-color: var(--pergaminho); border: 3px solid #5a1010; border-radius: 8px; padding: 40px; box-shadow: 8px 12px 25px rgba(0,0,0,0.7);">
+                            <div style="font-size: 4rem; margin-bottom: 20px;">⚠️</div>
+                            <h1 style="color: #5a1010; font-family: 'Georgia', serif; text-transform: uppercase; border-bottom: 2px dashed #5a1010; padding-bottom: 10px;">
+                                Ação Rejeitada!
+                            </h1>
+                            <p style="color: var(--tinta-fresca); font-size: 1.3rem; margin: 30px 0; font-style: italic;">
+                                "@excecao.Message"
+                            </p>
+                            <button class="btn-recuperar" @onclick="LimparErro">
+                                ⬅️ Retornar
+                            </button>
+                        </div>
+                    </div>
+                </ErrorContent>
+
+            </ErrorBoundary>
+
+        </article>
+    </main>
+
+</div> 
+
+@code {
+    private ErrorBoundary escudoDeErros;
+
+    private void LimparErro()
+    {
+        escudoDeErros?.Recover();
+    }
+
+    protected override void OnParametersSet()
+    {
+        escudoDeErros?.Recover();
+    }
+}

@@ -1,28 +1,25 @@
-﻿/* O contêiner que segura a barra e o botão lado a lado */
+﻿/* --- ESTILOS DA BARRA DE PESQUISA --- */
 .search-bar-container {
     display: flex;
     flex-direction: row;
-    align-items: stretch; /* Faz o botão e o input terem a mesma altura exata */
+    align-items: stretch;
     justify-content: center;
     gap: 15px;
     margin: 0 auto 40px auto;
     max-width: 700px;
-    flex-wrap: nowrap; /* Proíbe de quebrar a linha e jogar o botão pra baixo */
+    flex-wrap: nowrap;
 }
 
-/* A barra de pesquisa */
 .input-pesquisa {
-    flex-grow: 1; /* Faz a barra de texto esticar e ocupar o espaço livre */
+    flex-grow: 1;
     background-color: var(--pergaminho);
     color: var(--tinta-fresca);
     border: 2px solid var(--pergaminho-queimado);
     font-size: 1.1rem;
     padding: 10px 15px;
     border-radius: 4px;
-    min-width: 0; /* Impede bugs de tamanho em telas muito pequenas */
 }
 
-/* O botão de atalho */
 .btn-acao-lateral {
     background: linear-gradient(to bottom, var(--sangue-seco), #3b0909);
     color: var(--pergaminho);
@@ -33,19 +30,75 @@
     font-family: 'Georgia', serif;
     font-weight: bold;
     cursor: pointer;
-    text-decoration: none; /* Remove o sublinhado padrão de links */
-    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
-    transition: all 0.2s ease;
+    text-decoration: none;
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: auto; /* Anula qualquer width: 100% que ele tenha herdado */
-    white-space: nowrap; /* Garante que "Fundar Guilda" fique numa linha só */
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
     .btn-acao-lateral:hover {
         background: linear-gradient(to bottom, #8a1919, var(--sangue-seco));
         color: var(--ouro-velho);
         transform: translateY(-2px);
-        box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.6);
     }
+
+/* --- ESTILOS DOS CARTÕES DE GUILDA --- */
+
+/* A grade que organiza os cartões lado a lado */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* O visual do cartão individual */
+.feature-box {
+    background-color: var(--pergaminho);
+    background-image: var(--textura-papel);
+    border: 2px solid var(--pergaminho-queimado);
+    border-radius: 6px;
+    padding: 25px 20px;
+    text-align: center;
+    color: var(--tinta-fresca);
+    box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Remove a cor azul de link padrão do HTML */
+a {
+    color: inherit;
+}
+
+/* Efeito ao passar o mouse por cima do cartão */
+.feature-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 6px 10px 18px rgba(0, 0, 0, 0.7);
+    border-color: var(--sangue-seco);
+}
+
+.feature-box h3 {
+    color: var(--sangue-seco);
+    font-family: 'Georgia', serif;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    border-bottom: 1px dashed var(--pergaminho-queimado);
+    padding-bottom: 10px;
+}
+
+.feature-box p {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}

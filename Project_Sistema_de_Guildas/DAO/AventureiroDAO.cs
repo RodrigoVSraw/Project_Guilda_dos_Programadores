@@ -216,10 +216,11 @@ namespace AventureiroDATA.DAO
                     await conn.OpenAsync();
 
                     string sql = @"
-                        UPDATE aventureiros 
-                        SET nivel = @nivel, experiencia = @experiencia, vida = @vida, 
-                            forca = @forca, mana = @mana, energia = @energia 
-                        WHERE id = @id";
+                        SELECT 
+                            av.nivel, 
+                            g.nivelRequerido
+                        FROM aventureiros av, guildas g 
+                        WHERE av.id = @id_aventureiro AND g.id = @id_guilda";
 
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {

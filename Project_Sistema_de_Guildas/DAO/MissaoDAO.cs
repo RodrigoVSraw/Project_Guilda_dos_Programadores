@@ -151,7 +151,7 @@ namespace MissoesDATA.DAO
                 throw new Exception("Erro ao acessar o banco de dados: " + ex.Message, ex);
             }
         }
-        public async Task AlterarDescricaoDaMissao(int id)
+        public async Task AlterarDescricaoDaMissao(int id, string novaDescricao)
         {
             try
             {
@@ -161,8 +161,10 @@ namespace MissoesDATA.DAO
                     string sql = @"UPDATE missoes SET descricao = @descricao WHERE id = @id";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("descricao", "Descrição atualizada");
-                        cmd.Parameters.AddWithValue("id", id);
+                        
+                        cmd.Parameters.AddWithValue("@descricao", novaDescricao);
+                        cmd.Parameters.AddWithValue("@id", id);
+
                         await cmd.ExecuteNonQueryAsync();
                     }
                 }
@@ -170,22 +172,26 @@ namespace MissoesDATA.DAO
             catch (NpgsqlException ex)
             {
                 throw new Exception("Erro ao acessar o banco de dados: " + ex.Message, ex);
-
             }
         }
-        public async Task AlterarRecompensaDaMissao(int id)
+
+        public async Task AlterarRecompensaDaMissao(int id, decimal novoOuro, int novaExperiencia)
         {
             try
             {
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
-                    string sql = @"UPDATE missoes SET ouroRecompensa = @ouroRecompensa, experienciaRecompensa = @experienciaRecompensa WHERE id = @id";
+
+                    
+                    string sql = @"UPDATE missoes SET ouro_recompensa = @ouroRecompensa, experiencia_recompensa = @experienciaRecompensa WHERE id = @id";
+
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("ouroRecompensa", 100);
-                        cmd.Parameters.AddWithValue("experienciaRecompensa", 50);
-                        cmd.Parameters.AddWithValue("id", id);
+                        cmd.Parameters.AddWithValue("@ouroRecompensa", novoOuro);
+                        cmd.Parameters.AddWithValue("@experienciaRecompensa", novaExperiencia);
+                        cmd.Parameters.AddWithValue("@id", id);
+
                         await cmd.ExecuteNonQueryAsync();
                     }
                 }
@@ -194,7 +200,6 @@ namespace MissoesDATA.DAO
             {
                 throw new Exception("Erro ao acessar o banco de dados: " + ex.Message, ex);
             }
-
         }
         public async Task ExcluirMissao(int id)
         {

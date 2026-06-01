@@ -1,0 +1,144 @@
+﻿/* --- BARRA DE PESQUISA E RECRUTAMENTO --- */
+.search-bar-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    gap: 15px;
+    margin: 0 auto 40px auto;
+    max-width: 800px;
+    flex-wrap: nowrap;
+}
+
+.input-pesquisa {
+    flex-grow: 1;
+    background-color: var(--pergaminho);
+    color: var(--tinta-fresca);
+    border: 2px solid var(--pergaminho-queimado);
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    border-radius: 4px;
+}
+
+.btn-acao-lateral {
+    background: linear-gradient(to bottom, #1e3b1e, #0a170a); /* Verde escuro para remeter a "Adicionar" */
+    color: var(--pergaminho);
+    border: 2px solid #0f240f;
+    border-radius: 4px;
+    padding: 0 25px;
+    font-size: 1.1rem;
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+    .btn-acao-lateral:hover {
+        background: linear-gradient(to bottom, #2d5a2d, #1e3b1e);
+        color: var(--ouro-velho);
+        transform: translateY(-2px);
+    }
+
+/* --- GRADE DE MEMBROS --- */
+.membros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* --- O CARTÃO DO MEMBRO --- */
+.membro-card {
+    background-color: var(--pergaminho);
+    background-image: var(--textura-papel);
+    border: 2px solid var(--pergaminho-queimado);
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    color: var(--tinta-fresca);
+    box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .membro-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 6px 10px 16px rgba(0, 0, 0, 0.6);
+    }
+
+.membro-info {
+    margin-bottom: 20px;
+}
+
+.membro-icone {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.membro-info h3 {
+    color: var(--sangue-seco);
+    font-family: 'Georgia', serif;
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed var(--pergaminho-queimado);
+    padding-bottom: 5px;
+}
+
+.membro-info p {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+/* --- BOTÕES DO CARTÃO (INSPECIONAR E EXPULSAR) --- */
+.membro-acoes {
+    display: flex;
+    flex-direction: column; /* Coloca os botões um em cima do outro */
+    gap: 10px;
+}
+
+.btn-perfil, .btn-expulsar {
+    padding: 10px;
+    border-radius: 4px;
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    display: block;
+    width: 100%;
+}
+
+/* Botão Inspecionar (Visual Padrão da Taverna) */
+.btn-perfil {
+    background: linear-gradient(to bottom, var(--ferro-forjado, #333), #1a1a1a);
+    color: var(--ouro-velho);
+    border: 1px solid var(--ouro-velho);
+}
+
+    .btn-perfil:hover {
+        background: linear-gradient(to bottom, #444, var(--ferro-forjado, #333));
+        color: #fff;
+    }
+
+/* Botão Expulsar (Visual Perigoso/Destrutivo) */
+.btn-expulsar {
+    background: linear-gradient(to bottom, #5a1010, #300505);
+    color: #ffbaba;
+    border: 1px solid #ff4a4a;
+}
+
+    .btn-expulsar:hover {
+        background: linear-gradient(to bottom, #8a1919, #5a1010);
+        color: #fff;
+        box-shadow: 0 0 10px rgba(255, 74, 74, 0.4);
+    }

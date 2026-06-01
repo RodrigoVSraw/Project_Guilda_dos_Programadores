@@ -298,6 +298,64 @@ body {
     animation: fadeIn 0.4s ease-in-out;
 }
 
+/* --- SCROLLBAR TEMÁTICA DE RPG --- */
+
+/* Largura da barra inteira */
+::-webkit-scrollbar {
+    width: 14px;
+    background-color: #1a0d0d; /* Fundo de madeira bem escura */
+}
+
+/* O trilho por onde a barra corre */
+::-webkit-scrollbar-track {
+    background-color: #1a0d0d;
+    border-left: 2px solid #000; /* Linha preta para separar do conteúdo */
+}
+
+/* O puxador (a parte que você clica e arrasta) */
+::-webkit-scrollbar-thumb {
+    background-color: var(--sangue-seco, #8a1919); /* Usando sua cor ou um vermelho escuro padrão */
+    border-radius: 8px;
+    border: 3px solid #1a0d0d; /* Cria um "espaço" ao redor do puxador */
+}
+
+    /* O puxador quando você passa o mouse por cima */
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: var(--ouro-velho, #b88d3b); /* Brilha em dourado */
+        cursor: pointer;
+    }
+
+.btn-recuperar {
+    background: linear-gradient(to bottom, #333, #1a1a1a);
+    color: var(--ouro-velho);
+    border: 2px solid var(--ouro-velho);
+    border-radius: 4px;
+    padding: 10px 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+}
+
+    .btn-recuperar:hover {
+        transform: translateY(-2px);
+        color: #fff;
+    }
+
+/* Garante que o layout ocupe a tela toda */
+.app-layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Garante que a área principal role para baixo quando o conteúdo for grande */
+main {
+    flex-grow: 1;
+    overflow-y: auto; /* É isso que faz a barra de rolagem aparecer! */
+    height: 100vh;
+}
 /* Pequena animação para o texto surgir suavemente ao trocar de classe */
 @keyframes fadeIn {
     from {

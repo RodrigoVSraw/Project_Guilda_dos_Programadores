@@ -1,0 +1,111 @@
+﻿@page "/Guilda/Membros/{Id:int}"
+@using SistemaDeGuildas.Models
+@using SistemaDeGuildas.Services
+
+@inject GuildaS GuildaService
+@rendermode InteractiveServer
+
+<PageTitle>Membros da Guilda</PageTitle>
+
+
+@if (guildaAtual == null)
+{
+    <div class="text-center mt-5">
+        <h3 style="color: var(--ouro-velho);">Aguarde... Buscando os registros da guilda...</h3>
+    </div>
+}
+else
+{
+    <Banner Titulo="Quadro de Membros" Descricao="@($"Guilda {guildaAtual.Nome}")" />
+
+    <div class="container main-content mt-4" style="padding-bottom: 50px;">
+        
+        <div class="search-bar-container">
+            <input type="text"
+                   @bind="pesquisaMembro"
+                   @bind:event="oninput"
+                   class="form-control input-pesquisa"
+                   placeholder="Buscar membro por nome..." />
+
+        </div>
+
+        @if (guildaAtual.Membros == null || !guildaAtual.Membros.Any())
+        {
+            <div class="text-center mt-5">
+                <h3 style="color: var(--ouro-velho);">Esta guilda ainda não possui membros alistados.</h3>
+            </div>
+        }
+        else
+        {
+            <div class="membros-grid">
+                @foreach (var membro in membrosFiltrados)
+                {
+                    <div class="membro-card">
+                        <div class="membro-info">
+                            <div class="membro-icone">🛡️</div>
+                            <h3>@membro.Nome</h3>
+                            <p><strong>Classe:</strong> @membro.ClasseDeCombate</p>
+                            <p><strong>Nível:</strong> @membro.Nivel</p>
+                        </div>
+                        
+                        <div class="membro-acoes">
+                            <a href="/Aventureiro/Perfil/@membro.Id" class="btn-perfil">
+                                👁️ Inspecionar
+                            </a>
+                            
+                            <button class="btn-expulsar" @onclick="() => RemoverMembro(membro)">
+                                ❌ Expulsar
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (!membrosFiltrados.Any())
+            {
+                <div class="text-center mt-4">
+                    <p style="color: var(--pergaminho); font-size: 1.2rem;">
+                        Nenhum membro encontrado com o nome "<strong>@pesquisaMembro</strong>".
+                    </p>
+                </div>
+            }
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Guilda guildaAtual;
+    private string pesquisaMembro = "";
+
+    // Filtra os membros em tempo real com base no que for digitado
+    private IEnumerable<Aventureiro> membrosFiltrados
+    {
+        get
+        {
+            if (guildaAtual?.Membros == null)
+                return new List<Aventureiro>();
+
+            if (string.IsNullOrWhiteSpace(pesquisaMembro))
+                return guildaAtual.Membros;
+
+            return guildaAtual.Membros.Where(m => m.Nome.Contains(pesquisaMembro, StringComparison.OrdinalIgnoreCase));
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        guildaAtual = await GuildaService.ObterGuildaPorIdAsync(Id);
+    }
+
+    private async Task RemoverMembro(Aventureiro aventureiro)
+    {
+        
+        //await GuildaService.RemoverAventureiroDaGuildaAsync(aventureiro.Id);
+        
+        guildaAtual.Membros.Remove(aventureiro);
+    }
+}
