@@ -278,13 +278,13 @@ namespace GuildasDATA.DAO
                             while (await reader.ReadAsync())
                             {
                                 var missao = new Missao(
-                                    reader.GetInt32(0),
                                     reader.GetString(1),
                                     reader.GetString(2),
                                     reader.GetDecimal(3),
                                     reader.GetInt32(4),
                                     reader.GetInt32(5)
                                 );
+                                missao.Id = reader.GetInt32(0);
                                 listaMissoes.Add(missao);
                             }
                         }

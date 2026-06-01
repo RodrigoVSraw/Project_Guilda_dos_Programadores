@@ -1,0 +1,97 @@
+﻿@page "/missoes/visualizar"
+@using SistemaDeGuildas.Models
+@using SistemaDeGuildas.Services
+@inject MissaoS MissaoService
+@rendermode InteractiveServer
+
+<PageTitle>Visualizar Missões</PageTitle>
+
+<Banner Titulo="Visualizar Missões" Descricao="Explore todas as missões disponíveis!" />
+<div>
+
+    <div class="search-bar-container">
+        <input type="text"
+            @bind="pesquisaMissao"
+            @bind:event="oninput"
+            class="form-control input-pesquisa"
+            placeholder="Buscar missão por nome..."/>
+
+        <a href="/Missoes/Cadastro" class="btn-acao-lateral">
+            ➕ Criar Missão
+        </a>
+    </div>
+
+    @if (listaMissoes == null)
+    {
+        <div class="text-center mt-5">
+            <h3 style="color: var(--ouro-velho);">Aguarde... Os mensageiros estão buscando os registros de missões</h3>
+        </div>
+
+    }
+    else if (listaMissoes.Count == 0)
+    {
+        <div class="text-center mt-5">
+            <h3 style="color: var(--ouro-velho);">Paz pelo nosso mundo! Sem missões no momento.</h3>
+        </div>
+    }
+    else
+    {
+        <div class="features-grid">
+            @foreach (var missao in missoesFiltradas)
+            {
+                <a href="/Missoes/Detalhes/@missao.Id" style="text-decoration: none">
+                    <div class="feature-box">
+                        <div class="feature-icon"></div>
+                        <h3>@missao.Nome</h3>
+                        <p><strong>Descrição:</strong> @missao.Descricao</p>
+                        <p><strong>Ouro:</strong>@missao.OuroRecompensa</p>
+                        <p><strong>Xp:</strong>@missao.ExperienciaRecompensa</p>
+                    </div>    
+
+
+                </a>
+            }
+        </div>
+
+        @if (!missoesFiltradas.Any())
+        {
+            <div class="text-center mt-4">
+                <p style="color: var(--pergaminho); font-size: 1.2rem;">
+                    Nenhuma missão encontrada com o nome "<strong>@pesquisaMissao</strong>".
+                </p>
+            </div>
+        }
+    }
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+@code {
+    private List<Missao> listaMissoes;
+    private string pesquisaMissao = "";
+
+    private IEnumerable<Missao> missoesFiltradas
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(pesquisaMissao))
+                return listaMissoes;
+
+            return listaMissoes.Where(m => m.Nome.Contains(pesquisaMissao, StringComparison.OrdinalIgnoreCase));
+
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        listaMissoes = await MissaoService.VerTodasAsMissoes();
+    }
+}
