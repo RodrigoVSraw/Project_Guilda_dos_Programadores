@@ -1,11 +1,134 @@
 ﻿@page "/Guilda/Cadastro"
 @using SistemaDeGuildas.Services
 @using SistemaDeGuildas.Models
+
 @inject GuildaS GuildaService
+@inject AventureiroS AventureiroService 
+@inject NavigationManager NavManager
 @rendermode InteractiveServer
 
-<h3>CadastroGuildas</h3>
+<PageTitle>Fundar Nova Guilda</PageTitle>
+
+<Banner Titulo="Registro de Guildas" Descricao="Assine a carta de fundação e crie um novo estandarte!" />
+
+<div class="container main-content mt-4" style="max-width: 650px; padding-bottom: 50px;">
+    
+    <div class="formulario-card">
+        
+        @if (mostrarSucesso)
+        {
+            <div class="mensagem-sucesso text-center">
+                <div style="font-size: 4rem; margin-bottom: 15px;">👑✔️</div>
+                <h2 style="color: #2d5a2d; font-family: 'Georgia', serif;">A Guilda foi fundada!</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 25px;">Salve o novo Líder! O seu estandarte já está pendurado na Taverna.</p>
+                
+                <a href="/Guilda/Pesquisa" class="btn-taverna btn-sucesso">
+                    🍻 Ir para a Taverna
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="text-center mb-4">
+                <h2 class="form-titulo">Carta de Fundação</h2>
+                <p class="form-subtitulo">Preencha os dados abaixo com o tinteiro para oficializar o seu grupo.</p>
+                <div class="divisor-elegante"></div>
+            </div>
+
+            <EditForm Model="@modeloFormulario" OnValidSubmit="SalvarGuilda" FormName="cadastroGuilda">
+                
+                @* NOVO CAMPO: O Nome do Fundador *@
+                <div class="form-group" style="background-color: rgba(90, 16, 16, 0.05); padding: 15px; border-radius: 4px; border-left: 4px solid var(--sangue-seco);">
+                    <label class="form-label">Assinatura do Fundador (Seu Nome):</label>
+                    <InputText @bind-Value="modeloFormulario.NomeCriador" class="form-control input-taverna" placeholder="Digite seu nome exato de aventureiro..." />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nome do Estandarte (Guilda):</label>
+                    <InputText @bind-Value="modeloFormulario.Nome" class="form-control input-taverna" placeholder="Ex: Cavaleiros do Lobo Branco..." />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nível Mínimo para Recrutamento:</label>
+                    <InputNumber @bind-Value="modeloFormulario.NivelRequerido" class="form-control input-taverna" min="1" style="max-width: 150px;" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Propósito e Descrição:</label>
+                    <InputTextArea @bind-Value="modeloFormulario.Descricao" class="form-control input-taverna text-area-taverna" placeholder="Escreva os ideais da sua guilda e regras de conduta..." rows="4" />
+                </div>
+
+                @if (!string.IsNullOrEmpty(mensagemErro))
+                {
+                    <div class="mensagem-erro text-center mt-3">
+                        <strong>Aviso:</strong> @mensagemErro
+                    </div>
+                }
+
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn-taverna btn-fundar">
+                        🖋️ Fundar Guilda
+                    </button>
+                </div>
+                
+            </EditForm>
+        }
+    </div>
+</div>
 
 @code {
+    private class FormularioGuilda
+    {
+        public string NomeCriador { get; set; } = "";
+        public string Nome { get; set; } = "";
+        public int NivelRequerido { get; set; } = 1;
+        public string Descricao { get; set; } = "";
+    }
 
+    private FormularioGuilda modeloFormulario = new FormularioGuilda();
+    private bool mostrarSucesso = false;
+    private string mensagemErro = "";
+
+    protected async Task SalvarGuilda()
+    {
+        mensagemErro = "";
+
+        if (string.IsNullOrWhiteSpace(modeloFormulario.NomeCriador) || 
+            string.IsNullOrWhiteSpace(modeloFormulario.Nome) || 
+            string.IsNullOrWhiteSpace(modeloFormulario.Descricao))
+        {
+            mensagemErro = "O contrato exige que todos os campos sejam preenchidos!";
+            return;
+        }
+
+        var todosAventureiros = await AventureiroService.ListarAventureirosAsync();
+        var fundador = todosAventureiros.FirstOrDefault(a => a.Nome.Equals(modeloFormulario.NomeCriador, StringComparison.OrdinalIgnoreCase));
+
+        if (fundador == null)
+        {
+            mensagemErro = "Fundador não encontrado! Visite o Salão dos Heróis para se cadastrar primeiro.";
+            return;
+        }
+
+        if (fundador.IdGuilda != null)
+        {
+            mensagemErro = "Você já pertence a uma guilda! Um líder não pode servir a dois estandartes simultaneamente.";
+            return;
+        }
+
+        try
+        {
+          
+            Guilda novaGuilda = new Guilda(modeloFormulario.Nome, modeloFormulario.NivelRequerido, modeloFormulario.Descricao);
+            await GuildaService.CriarGuildaAsync(novaGuilda);
+            
+            await AventureiroService.NomearLiderDaGuildaAsync(fundador.Id, novaGuilda.Id);
+
+            mostrarSucesso = true;
+        }
+        catch (Exception ex)
+        {
+            mensagemErro = ex.Message;
+        }
+    }
 }

@@ -138,11 +138,13 @@ namespace AventureiroDATA.DAO
                 {
                     await conn.OpenAsync();
                     string sql = @"
-                        SELECT 
-                            id, nome, cargo, classe_de_combate, nivel, experiencia, 
-                            vida, forca, mana, energia, ouro, habilidade_especial, id_guilda
-                        FROM aventureiros 
-                        WHERE id = @id";
+                    SELECT 
+                    a.id, a.nome, a.cargo, a.classe_de_combate, a.nivel, 
+                    a.experiencia, a.vida, a.forca, a.mana, a.energia, a.ouro, a.habilidade_especial,
+                    g.id AS guilda_id, g.nome AS guilda_nome 
+                    FROM aventureiros a
+                    LEFT JOIN guildas g ON a.id_guilda = g.id
+                    WHERE a.id = @id";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", id);
@@ -182,6 +184,15 @@ namespace AventureiroDATA.DAO
                                 aventureiro.Ouro = reader.GetDecimal(10);
                                 aventureiro.HabilidadeEspecial = reader.GetString(11);
                                 aventureiro.IdGuilda = reader.IsDBNull(12) ? null : reader.GetInt32(12);
+                                if (aventureiro.IdGuilda != null)
+                                {
+                                    aventureiro.Guilda = new Guilda(
+                                        reader.GetString(13), 
+                                        1,
+                                        "Descrição não carregada nesta tela."
+                                    );
+                                    aventureiro.Guilda.Id = aventureiro.IdGuilda.Value;
+                                }
                                 return aventureiro;
                             }
                             else
@@ -327,13 +338,11 @@ namespace AventureiroDATA.DAO
                 {
                     await conn.OpenAsync();
 
-                    // Verifica se o aventureiro está em uma guilda
                     bool temGuilda = await VerificarStatusGuildaAsync(conn, idAventureiro);
 
                     if (!temGuilda)
                         throw new InvalidOperationException("O aventureiro não está em nenhuma guilda.");
 
-                    // Remove o aventureiro da guilda (seta id_guilda como NULL)
                     string sqlAtualizar = "UPDATE aventureiros SET id_guilda = NULL WHERE id = @id_aventureiro";
                     using (var cmd = new NpgsqlCommand(sqlAtualizar, conn))
                     {
@@ -360,7 +369,9 @@ namespace AventureiroDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
+
                     string sql = "DELETE FROM aventureiros WHERE id = @id_aventureiro";
+
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@id_aventureiro", idAventureiro);
@@ -386,6 +397,27 @@ namespace AventureiroDATA.DAO
                 var resultado = await cmd.ExecuteScalarAsync();
 
                 return resultado != null && resultado != DBNull.Value;
+            }
+        }
+        public async Task NomearLiderDaGuildaAsync(int idAventureiro, int idGuilda)
+        {
+            try
+            {
+                using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
+                {
+                    await conn.OpenAsync();
+                    string sql = "UPDATE aventureiros SET id_guilda = @idGuilda, cargo = 'Líder' WHERE id = @idAventureiro";
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@idGuilda", idGuilda);
+                        cmd.Parameters.AddWithValue("@idAventureiro", idAventureiro);
+                        await cmd.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                throw new InvalidOperationException($"Erro ao coroar o líder: {ex.Message}");
             }
         }
     }

@@ -1,25 +1,40 @@
 ﻿@page "/Guilda/Pesquisa"
 @using SistemaDeGuildas.Models
 @using SistemaDeGuildas.Services
+
+@inject IJSRuntime JSRuntime
 @inject GuildaS GuildaService
 @rendermode InteractiveServer
 
 <PageTitle>Taverna de Guildas</PageTitle>
 
-<Banner Titulo="Taverna de Alistamento" Descricao="Explore os registros de guildas já criadas e se aliste"/>
+<Banner Titulo="Taverna de Alistamento" Descricao="Explore os registros de guildas já criadas e se aliste" />
 
 <div>
-<div class="search-bar-container">
-    <input type="text"
-           @bind="pesquisaGuilda"
-           @bind:event="oninput"
-           class="form-control input-pesquisa"
-           placeholder="Buscar guilda por nome..." />
+    <div class="search-bar-container">
+        <input type="text"
+               @bind="pesquisaGuilda"
+               @bind:event="oninput"
+               class="form-control input-pesquisa"
+               placeholder="Buscar guilda por nome..." />
 
-    <a href="/Guilda/Cadastro" class="btn-acao-lateral">
-        ➕ Fundar Guilda
-    </a>
-</div>
+        <a href="/Guilda/Cadastro" class="btn-acao-lateral">
+            ➕ Fundar Guilda
+        </a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(mensagemAviso))
+    {
+        <div class="text-center mb-4" style="background-color: rgba(138, 25, 25, 0.1); color: #8a1919; border: 1px dashed #8a1919; padding: 10px; border-radius: 4px; margin-top: 15px;">
+            <strong>Atenção:</strong> @mensagemAviso
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(mensagemSucesso))
+    {
+        <div class="text-center mb-4" style="background-color: rgba(45, 90, 45, 0.1); color: #2d5a2d; border: 1px dashed #2d5a2d; padding: 10px; border-radius: 4px; margin-top: 15px;">
+            <strong>Sucesso:</strong> @mensagemSucesso
+        </div>
+    }
 
     @if (listaGuildas == null)
     {
@@ -38,9 +53,17 @@
         <div class="features-grid">
             @foreach (var guilda in guildasFiltradas)
             {
-                <a href="/Guilda/Painel/@guilda.Id" style="text-decoration: none;">
-                    <div class="feature-box">
-                        <div class="feature-icon">🚩</div> 
+                <div class="feature-box" style="position:relative">
+
+                    <button class="btn-deletar-cartao" title="Desfazer Guilda"
+                            @onclick="() => DeletarGuilda(guilda.Id)"
+                            @onclick:stopPropagation="true">
+                        ❌
+                    </button>
+
+                    <a href="/Guilda/Painel/@guilda.Id" style="text-decoration: none; color: inherit; display: block;">
+
+                        <div class="feature-icon">🚩</div>
                         <h3>@guilda.Nome</h3>
 
                         <p><strong>Nível da Guilda:</strong> @guilda.Nivel</p>
@@ -49,10 +72,9 @@
                             "@guilda.Descricao"
                         </p>
 
-                      
                         <p><strong>Membros:</strong> @(guilda.Membros?.Count ?? 0)</p>
-                    </div>
-                </a>
+                    </a>
+                </div>
             }
         </div>
 
@@ -69,24 +91,49 @@
 
 @code {
 
-	List<Guilda> listaGuildas;
-	string pesquisaGuilda = "";
+    List<Guilda> listaGuildas;
+    string pesquisaGuilda = "";
 
-	private IEnumerable<Guilda> guildasFiltradas
-	{
-		get
-		{
-			if (string.IsNullOrWhiteSpace(pesquisaGuilda))
-				return listaGuildas;
+    private string mensagemAviso = "";
+    private string mensagemSucesso = "";
 
-			return listaGuildas.Where(g => g.Nome.Contains(pesquisaGuilda, StringComparison.OrdinalIgnoreCase));
-		}
-	}
+    private IEnumerable<Guilda> guildasFiltradas
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(pesquisaGuilda))
+                return listaGuildas;
 
-	
-	
-	protected override async Task OnInitializedAsync()
-	{
-		listaGuildas = await GuildaService.ObterGuildasAsync();
-	}
+            return listaGuildas.Where(g => g.Nome.Contains(pesquisaGuilda, StringComparison.OrdinalIgnoreCase));
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaGuildas = await GuildaService.ObterGuildasAsync();
+    }
+
+    private async Task DeletarGuilda(int id)
+    {
+        mensagemAviso = "";
+        mensagemSucesso = "";
+
+        bool confirmado = await JSRuntime.InvokeAsync<bool>("confirm", "Tem certeza que deseja queimar o estandarte e desfazer esta guilda?");
+
+        if (confirmado)
+        {
+            try
+            {
+                await GuildaService.ExcluirGuildaAsync(id);
+
+                listaGuildas.RemoveAll(g => g.Id == id);
+                mensagemSucesso = "O estandarte foi queimado e a guilda desfeita permanentemente!";
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                mensagemAviso = $"A guilda resistiu à exclusão: {ex.Message}";
+            }
+        }
+    }
 }

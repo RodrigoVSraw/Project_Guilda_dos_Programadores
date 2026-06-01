@@ -2,6 +2,7 @@
 @using SistemaDeGuildas.Models
 @using SistemaDeGuildas.Services
 @inject AventureiroS AventureiroService
+@inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
 
 <PageTitle>O Salão dos Heróis</PageTitle>
@@ -40,15 +41,18 @@
         <div class="features-grid">
             @foreach (var aventureiro in aventureirosFiltrados)
             {
-                <a href="/Aventureiros/Perfil/@aventureiro.Id" style="text-decoration: none;">
-                    <div class="feature-box">
+                <div class="feature-box" style="position:relative">
+                    <button class="btn-deletar-cartao" title="Banir Herói" @onclick="() => DeletarAventureiro(aventureiro.Id)">
+                        ❌
+                    </button>
+                    <a href="/Aventureiros/Perfil/@aventureiro.Id" style="text-decoration: none;">     
                         <div class="feature-icon">🛡️</div>
                         <h3>@aventureiro.Nome</h3>
                         <p><strong>Classe:</strong> @aventureiro.ClasseDeCombate</p>
                         <p><strong>Nível:</strong> @aventureiro.Nivel</p>
                         <p><strong>Ouro:</strong> $@aventureiro.Ouro</p>
-                    </div>
-                </a>
+                    </a>
+                </div>
             }
         </div>
 
@@ -81,5 +85,24 @@
     protected override async Task OnInitializedAsync()
     {
         listaAventureiros = await AventureiroService.ListarAventureirosAsync();
+    }
+
+    private async Task DeletarAventureiro(int id)
+    {
+        bool confirmado = await JSRuntime.InvokeAsync<bool>("confirm", "Tem certeza que deseja banir este aventureiro da taverna permanentemente?");
+
+        if (confirmado)
+        {
+            try
+            {
+                await AventureiroService.ExcluirAventureiroAsync(id);
+
+                listaAventureiros.RemoveAll(a => a.Id == id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao excluir: {ex.Message}");
+            }
+        }
     }
 }

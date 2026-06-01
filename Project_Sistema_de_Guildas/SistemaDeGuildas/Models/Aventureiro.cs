@@ -33,7 +33,7 @@ namespace SistemaDeGuildas.Models
                 throw new ArgumentException($"O Nível do aventureiro deve ser pelo menos {guilda.NivelRequerido} para ingressar na guilda {guilda.Nome}.", nameof(nivel));
 
             Nome = nome;
-            Cargo = "Nenhum";
+            Cargo = "Membro";
             Nivel = 1;
             Guilda = guilda;
             IdGuilda = guilda?.Id;

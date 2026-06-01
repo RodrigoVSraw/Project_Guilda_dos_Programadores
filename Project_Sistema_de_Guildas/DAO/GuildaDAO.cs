@@ -305,6 +305,27 @@ namespace GuildasDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
+
+                    string checkSql = "SELECT cargo FROM aventureiros WHERE id = @id";
+                    using (var checkCmd = new NpgsqlCommand(checkSql, conn))
+                    {
+                        checkCmd.Parameters.AddWithValue("@id", id);
+                        var cargoObj = await checkCmd.ExecuteScalarAsync();
+
+                        if (cargoObj != null)
+                        {
+                            string cargo = cargoObj.ToString();
+                            if (cargo.Equals("Líder", StringComparison.OrdinalIgnoreCase))
+                            {
+                                throw new InvalidOperationException("O Líder não pode abandonar ou ser expulso da guilda! Destrua o estandarte (exclua a guilda) primeiro.");
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Nenhum aventureiro encontrado com o ID fornecido.");
+                        }
+                    }
+
                     string sql = "UPDATE aventureiros SET id_guilda = NULL WHERE id = @id";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {

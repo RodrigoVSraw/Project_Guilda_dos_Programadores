@@ -116,5 +116,17 @@ namespace SistemaDeGuildas.Services
                 throw new Exception("Erro ao consultar missões da guilda: " + ex.Message, ex);
             }
         }
+
+        public async Task RemoverAventureiro(int aventureiroId)
+        {
+            try
+            {
+                await _guildaDAO.RemoverAventureiroDaGuilda(aventureiroId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao remover aventureiro da guilda: " + ex.Message, ex);
+            }
+        }
     }
 }

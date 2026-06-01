@@ -356,6 +356,33 @@ main {
     overflow-y: auto; /* É isso que faz a barra de rolagem aparecer! */
     height: 100vh;
 }
+
+/* O botão de excluir que ficará no canto */
+.btn-deletar-cartao {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+    z-index: 10; /* Garante que fique clicável por cima de tudo */
+}
+
+    .btn-deletar-cartao:hover {
+        opacity: 1;
+        transform: scale(1.2);
+        filter: drop-shadow(0 0 4px #8a1919);
+    }
+
+/* ATENÇÃO: A classe principal do seu cartão de aventureiro e de guilda 
+PRECISA ter essa propriedade abaixo para o botão não "voar" para fora dele:
+*/
+.seu-cartao-base {
+    position: relative;
+}
 /* Pequena animação para o texto surgir suavemente ao trocar de classe */
 @keyframes fadeIn {
     from {

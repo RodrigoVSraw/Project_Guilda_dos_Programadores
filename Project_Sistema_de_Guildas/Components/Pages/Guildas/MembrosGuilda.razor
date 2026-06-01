@@ -3,10 +3,10 @@
 @using SistemaDeGuildas.Services
 
 @inject GuildaS GuildaService
+@inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
 
 <PageTitle>Membros da Guilda</PageTitle>
-
 
 @if (guildaAtual == null)
 {
@@ -19,15 +19,27 @@ else
     <Banner Titulo="Quadro de Membros" Descricao="@($"Guilda {guildaAtual.Nome}")" />
 
     <div class="container main-content mt-4" style="padding-bottom: 50px;">
-        
+
         <div class="search-bar-container">
             <input type="text"
                    @bind="pesquisaMembro"
                    @bind:event="oninput"
                    class="form-control input-pesquisa"
                    placeholder="Buscar membro por nome..." />
-
         </div>
+
+        @if (!string.IsNullOrEmpty(mensagemAviso))
+        {
+            <div class="text-center mb-4" style="background-color: rgba(138, 25, 25, 0.1); color: #8a1919; border: 1px dashed #8a1919; padding: 10px; border-radius: 4px;">
+                <strong>Atenção:</strong> @mensagemAviso
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(mensagemSucesso))
+        {
+            <div class="text-center mb-4" style="background-color: rgba(45, 90, 45, 0.1); color: #2d5a2d; border: 1px dashed #2d5a2d; padding: 10px; border-radius: 4px;">
+                <strong>Sucesso:</strong> @mensagemSucesso
+            </div>
+        }
 
         @if (guildaAtual.Membros == null || !guildaAtual.Membros.Any())
         {
@@ -42,17 +54,20 @@ else
                 {
                     <div class="membro-card">
                         <div class="membro-info">
-                            <div class="membro-icone">🛡️</div>
+                            <div class="membro-icone">
+                                @(membro.Cargo == "Líder" ? "👑" : "🛡️")
+                            </div>
                             <h3>@membro.Nome</h3>
+                            <p><strong>Cargo:</strong> @membro.Cargo</p>
                             <p><strong>Classe:</strong> @membro.ClasseDeCombate</p>
                             <p><strong>Nível:</strong> @membro.Nivel</p>
                         </div>
-                        
+
                         <div class="membro-acoes">
-                            <a href="/Aventureiro/Perfil/@membro.Id" class="btn-perfil">
+                            <a href="/Aventureiros/Perfil/@membro.Id" class="btn-perfil">
                                 👁️ Inspecionar
                             </a>
-                            
+
                             <button class="btn-expulsar" @onclick="() => RemoverMembro(membro)">
                                 ❌ Expulsar
                             </button>
@@ -80,7 +95,9 @@ else
     private Guilda guildaAtual;
     private string pesquisaMembro = "";
 
-    // Filtra os membros em tempo real com base no que for digitado
+    private string mensagemAviso = "";
+    private string mensagemSucesso = "";
+
     private IEnumerable<Aventureiro> membrosFiltrados
     {
         get
@@ -97,15 +114,33 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        
         guildaAtual = await GuildaService.ObterGuildaPorIdAsync(Id);
     }
 
     private async Task RemoverMembro(Aventureiro aventureiro)
     {
         
-        //await GuildaService.RemoverAventureiroDaGuildaAsync(aventureiro.Id);
-        
-        guildaAtual.Membros.Remove(aventureiro);
+        mensagemAviso = "";
+        mensagemSucesso = "";
+
+        bool confirmado = await JSRuntime.InvokeAsync<bool>("confirm", $"Tem certeza que deseja expulsar {aventureiro.Nome} da guilda?");
+
+        if (!confirmado) return;
+
+        try
+        {
+            await GuildaService.RemoverAventureiro(aventureiro.Id);
+
+            guildaAtual.Membros.Remove(aventureiro);
+            mensagemSucesso = $"{aventureiro.Nome} foi expulso(a) da guilda com sucesso!";
+        }
+        catch (InvalidOperationException ex)
+        {
+            mensagemAviso = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            mensagemAviso = $"Erro no sistema: {ex.Message}";
+        }
     }
 }

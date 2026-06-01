@@ -101,7 +101,6 @@
 
     private Guilda painelG;
 
-    // Variáveis de controle do formulário
     private bool mostrandoFormulario = false;
     private string nomeInscricao = "";
     private string mensagemAviso = "";
@@ -157,7 +156,6 @@
             
             await AventureiroService.EntrarEmUmaGuildaAsync(aventureiroEncontrado.Id, painelG.Id);
 
-            
             painelG.Membros.Add(aventureiroEncontrado);
             mensagemSucesso = $"Bem-vindo(a) à guilda, {aventureiroEncontrado.Nome}!";
             nomeInscricao = "";

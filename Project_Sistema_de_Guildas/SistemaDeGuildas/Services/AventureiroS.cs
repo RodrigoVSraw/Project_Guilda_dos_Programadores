@@ -67,5 +67,10 @@ namespace SistemaDeGuildas.Services
 
             await _aventureiroDAO.ExcluirAventureiroPorId(id);
         }
+
+        public async Task NomearLiderDaGuildaAsync(int idAventureiro, int idGuilda)
+        {
+            await _aventureiroDAO.NomearLiderDaGuildaAsync(idAventureiro, idGuilda);
+        }
     }
 }
