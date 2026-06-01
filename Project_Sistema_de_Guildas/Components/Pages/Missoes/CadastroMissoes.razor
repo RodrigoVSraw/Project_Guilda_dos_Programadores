@@ -1,5 +1,79 @@
 ﻿@page "/Missoes/Cadastro"
+@using SistemaDeGuildas.Models
+@using SistemaDeGuildas.Services
+@rendermode InteractiveServer
+@inject MissaoS MissaoService
+<PageTitle>Cadastro de Missão</PageTitle>
+<Banner Titulo="Cadastro de Missão" Descricao="Crie uma nova missão aqui!"/>
+<div class="container main-content mt-4" style="max-width: 700px;">
+    <div class="form-cadastro-card">
+        <EditForm Model="@novaMissao" OnInvalidSubmit="@SalvarMissao" FormName="formCriarMissao">
+            
+
+            <div class="mb-3">
+                <label>Nome da Missão: </label>
+                <InputText @bind-Value="nomeInserido" class="form-control" />
+            </div>
+
+
+            <div>
+                <label>Descrição da Missão: </label>
+                <InputText @bind-Value="descricaoInserida" class="form-control"/>
+            </div>
+
+
+            <div>
+                <label>Recompensa em Ouro: </label>
+                <InputNumber @bind-Value="recompensaInserida" class="form-control" />
+            </div>
+
+
+            <div>
+                <label>Recompensa em Experiência: </label>
+                <InputNumber @bind-Value="experienciaInserida" class="form-control" />
+            </div>
+
+
+            <div>
+                <label>Nível Recomendado: </label>
+                <InputNumber @bind-Value="nivelRecomendadoInserido" class="form-control" />
+            </div>
+
+
+            <button type="submit" class="btn-acao mt-3">Criar Missão</button>
+
+        </EditForm>
+    </div>
+</div>
+
+
 
 @code {
+    private string nomeInserido = "";
+    private string descricaoInserida = "";
+    private decimal recompensaInserida = 0m;
+    private float experienciaInserida = 0f;
+    private int nivelRecomendadoInserido = 0;
+    private Missao novaMissao = new Missao("", "", 0, 0, 0);
 
+    protected async Task SalvarMissao()
+    {
+        if (string.IsNullOrWhiteSpace(nomeInserido) || string.IsNullOrWhiteSpace(descricaoInserida) || recompensaInserida <= 0 || experienciaInserida <= 0 || nivelRecomendadoInserido <= 0)
+        {
+            return;
+        }
+        novaMissao.Nome = nomeInserido;
+        novaMissao.Descricao = descricaoInserida;
+        novaMissao.OuroRecompensa = recompensaInserida;
+        novaMissao.ExperienciaRecompensa = experienciaInserida;
+        novaMissao.NivelRecomendado = nivelRecomendadoInserido;
+        await MissaoService.CriarMissao(novaMissao);
+
+        nomeInserido = "";
+        descricaoInserida = "";
+        recompensaInserida = 0m;
+        experienciaInserida = 0f;
+        nivelRecomendadoInserido = 0;
+        
+    }
 }

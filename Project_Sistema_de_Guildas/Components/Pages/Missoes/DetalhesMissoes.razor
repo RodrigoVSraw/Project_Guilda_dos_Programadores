@@ -1,0 +1,64 @@
+﻿@page "/Missoes/Detalhes/{Id:int}"
+@using SistemaDeGuildas.Models
+@using SistemaDeGuildas.Services
+@inject MissaoS MissaoService
+
+<div>
+    @if (missaoDetalhada == null)
+    {
+        <div class="text-center mt-5">
+            <h3 style="color: var(--ouro-velho);">Aguarde... Consultando o mestre...</h3>
+        </div>   
+
+    }
+    else
+    {
+        <Banner Titulo="@missaoDetalhada.Nome" Descricao="@($"Descrição: {missaoDetalhada.Descricao} - Recompensa: {missaoDetalhada.OuroRecompensa} - Xp: {missaoDetalhada.ExperienciaRecompensa} - Nível Recomendado: {missaoDetalhada.NivelRecomendado}")" />
+        
+        <div class="container main-content mt-4" style="max-width: 900px; margin 0 auto; padding: 40px;">
+            <div class="missao-card">
+                <div class="missao-header">
+                    <h2>Detalhes da Missão</h2>
+                    @if(missaoDetalhada.AventureiroResponsavel == null && missaoDetalhada.GuildaResponsavel == null)
+                    {
+                        <div class="missao-badge aberta">
+                            <span>🔓 Aberta para Aventureiros ou Guildas</span>
+                        </div>
+                    }
+                    else if(missaoDetalhada.AventureiroResponsavel != null)
+                    {
+                        <div class="missao-badge em-andamento">
+                            <span>⚔️ Em andamento por: @missaoDetalhada.AventureiroResponsavel.Nome</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="=missao-bagde em-andamento">
+                            <span>⚔️ Em andamento por: @missaoDetalhada.GuildaResponsavel.Nome</span>
+                        </div>
+                    }
+                </div>
+                <div class="missao-body">
+                    <div class="status-geral">
+                        <p><strong>Recompensa:</strong> @missaoDetalhada.OuroRecompensa 💵</p>
+                        <p><strong>Experiencia:</strong> @missaoDetalhada.ExperienciaRecompensa XP</p>
+                        <p><strong>Nivel Recomendado:</strong> @missaoDetalhada.NivelRecomendado</p>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    }
+</div>
+
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Missao missaoDetalhada;
+    protected override async Task OnInitializedAsync()
+    {
+        missaoDetalhada = await MissaoService.VerMissaoPorId(Id);
+    }
+
+}

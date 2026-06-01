@@ -1,9 +1,10 @@
-﻿using Npgsql;
-using System;
+﻿using BuilderConnections.DAO;
+using Npgsql;
 using SistemaDeGuildas.Models;
+using SistemaDeGuildas.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BuilderConnections.DAO;
 
 namespace MissoesDATA.DAO
 {
@@ -62,19 +63,58 @@ namespace MissoesDATA.DAO
                             {
                                 var missao = new Missao(
 
-                                    reader.GetInt32(0),
                                     reader.GetString(1),
                                     reader.GetString(2),
                                     reader.GetDecimal(3),
                                     reader.GetInt32(4),
                                     reader.GetInt32(5)
                                 );
+                                missao.Id = reader.GetInt32(0);
                                 missoes.Add(missao);
                             }
                         }
                     }
                 }
                 return missoes;
+            }
+            catch (NpgsqlException ex)
+            {
+                throw new Exception("Erro ao acessar o banco de dados: " + ex.Message, ex);
+            }
+        }
+        public async Task<Missao> VerMissaoPorIdAsync(int id)
+        {
+            try
+            {
+                using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
+                {
+                    await conn.OpenAsync();
+                    string sql = @"SELECT id, nome, descricao, ouroRecompensa, experienciaRecompensa, nivelRecomendado FROM missoes WHERE id = @id";
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("id", id);
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                var missao = new Missao
+                                    (
+                                        reader.GetString(1),
+                                        reader.GetString(2),
+                                        reader.GetDecimal(3),
+                                        reader.GetInt32(4),
+                                        reader.GetInt32(5)
+                                    );
+                                missao.Id = reader.GetInt32(0);
+                                return missao;
+                            }
+                            else
+                            {
+                                throw new Exception($"Missão com ID {id} não encontrada.");
+                            }
+                        }
+                    }
+                }
             }
             catch (NpgsqlException ex)
             {
@@ -95,16 +135,20 @@ namespace MissoesDATA.DAO
                         cmd.Parameters.AddWithValue("id", id);
                         using (var reader = await cmd.ExecuteReaderAsync())
                         {
-                            var missao = new Missao
-                                (
-                                    reader.GetInt32(0),
+                            while (await reader.ReadAsync())
+                            {
+                                var missao = new Missao(
                                     reader.GetString(1),
                                     reader.GetString(2),
                                     reader.GetDecimal(3),
                                     reader.GetInt32(4),
                                     reader.GetInt32(5)
                                 );
-                            missoesAventureiro.Add(missao);
+
+                                missao.Id = reader.GetInt32(0);
+
+                                missoesAventureiro.Add(missao);
+                            }
                         }
                     }
                 }
@@ -131,16 +175,20 @@ namespace MissoesDATA.DAO
                         cmd.Parameters.AddWithValue("id", id);
                         using (var reader = await cmd.ExecuteReaderAsync())
                         {
-                            var missao = new Missao
-                                (
-                                    reader.GetInt32(0),
+                            while (await reader.ReadAsync())
+                            {
+                                var missao = new Missao(
                                     reader.GetString(1),
                                     reader.GetString(2),
                                     reader.GetDecimal(3),
                                     reader.GetInt32(4),
                                     reader.GetInt32(5)
                                 );
-                            missoesGuilda.Add(missao);
+
+                                missao.Id = reader.GetInt32(0);
+
+                                missoesGuilda.Add(missao);
+                            }
                         }
                     }
                 }

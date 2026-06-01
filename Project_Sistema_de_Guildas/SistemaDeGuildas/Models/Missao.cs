@@ -20,7 +20,7 @@ namespace SistemaDeGuildas.Models
 
         protected Missao() { }
 
-        public Missao(int id, string nome, string descricao, decimal ouroRecompensa, int experienciaRecompensa, int nivelRecomendado)
+        public Missao(string nome, string descricao, decimal ouroRecompensa, int experienciaRecompensa, int nivelRecomendado)
         {
             if (string.IsNullOrWhiteSpace(nome))
                 throw new ArgumentException("O Nome da missão não pode ser nulo ou vazio.", nameof(nome));
@@ -34,7 +34,6 @@ namespace SistemaDeGuildas.Models
             if (experienciaRecompensa < 0)
                 throw new ArgumentException("A Recompensa em Experiência da missão não pode ser negativa.", nameof(experienciaRecompensa));
 
-            Id = id;
             Nome = nome;
             Descricao = descricao;
             OuroRecompensa = ouroRecompensa;

@@ -27,7 +27,10 @@ namespace SistemaDeGuildas.Services
         {
             return await _missaoDAO.VerTodasAsMissoesAsync();
         }
-
+        public async Task<Missao> VerMissaoPorId(int id)
+        {
+            return await _missaoDAO.VerMissaoPorIdAsync(id);
+        }
         public async Task<List<Missao>> VerMissaoDoAventureiro(int id)
         {
             return await _missaoDAO.MostrarMissaoDoAventureiro(id);
