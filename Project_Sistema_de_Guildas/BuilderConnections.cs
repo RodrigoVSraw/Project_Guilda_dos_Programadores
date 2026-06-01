@@ -8,10 +8,12 @@ namespace BuilderConnections.DAO
         private static readonly NpgsqlConnectionStringBuilder connBuilder = new NpgsqlConnectionStringBuilder
         {
             Host = "aws-1-sa-east-1.pooler.supabase.com",
-            Port = 5432,
+
+            Port = 6543,
             Database = "postgres",
-            Username = "app_repository.lnvcvnpjifmqmtfifoqy",
-            Password = "guildaDosProgramadores",
+            Username = "",
+            Password = "",
+
             SslMode = SslMode.Disable,
             Pooling = false,
             MaxPoolSize = 100,

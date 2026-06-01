@@ -1,53 +1,81 @@
 ﻿@page "/Guilda/Pesquisa"
 @using SistemaDeGuildas.Models
-@using GuildasDATA.DAO
-@inject GuildaDAO GuildaDao
+@using SistemaDeGuildas.Services
+@inject GuildaS GuildaService
+@rendermode InteractiveServer
+
+<PageTitle>Taverna de Guildas</PageTitle>
+
+<Banner Titulo="Taverna de Alistamento" Descricao="Explore os registros de guildas já criadas e se aliste"/>
 
 <div>
-	<h2>Salão das Guildas</h2>
+<div class="search-bar-container">
+    <input type="text"
+           @bind="pesquisaGuilda"
+           @bind:event="oninput"
+           class="form-control input-pesquisa"
+           placeholder="Buscar guilda por nome..." />
 
-	<div>
-		<input type="text"
-			   @bind="pesquisaGuilda"
-			   @bind:event="oninput"
-			   placeholder="Buscar guilda por nome..." />
-	</div>
+    <a href="/Guilda/Cadastro" class="btn-acao-lateral">
+        ➕ Fundar Guilda
+    </a>
+</div>
 
-	<div>
-		@foreach (var guilda in guildasFiltradas)
-		{
-			<a href="/Guilda/Painel/@guilda.Id">
-			<div class="guilda-card">
-				<h3>@guilda.Nome</h3>
-				<p>Nível: @guilda.Nivel</p>
-				<p>Quantidade de Membros: @guilda.Membros.Count</p>
-				<p>Descrição: @guilda.Descricao</p>
-				<p>Nível Requerido: @guilda.NivelRequerido</p>
-			</div>
-			</a>
-		}
+    @if (listaGuildas == null)
+    {
+        <div class="text-center mt-5">
+            <h3 style="color: var(--ouro-velho);">Aguarde... Os mensageiros estão buscando os registos das guildas.</h3>
+        </div>
+    }
+    else if (listaGuildas.Count == 0)
+    {
+        <div class="text-center mt-5">
+            <h3 style="color: var(--ouro-velho);">Ainda não existem Guildas fundadas neste reino.</h3>
+        </div>
+    }
+    else
+    {
+        <div class="features-grid">
+            @foreach (var guilda in guildasFiltradas)
+            {
+                <a href="/Guilda/Painel/@guilda.Id" style="text-decoration: none;">
+                    <div class="feature-box">
+                        <div class="feature-icon">🚩</div> 
+                        <h3>@guilda.Nome</h3>
 
-		@if (!guildasFiltradas.Any())
-		{
-			<p>Nenhuma guilda encontrada com o nome "@pesquisaGuilda".</p>
-		}
-	</div>
+                        <p><strong>Nível da Guilda:</strong> @guilda.Nivel</p>
+                        <p><strong>Nível Requerido:</strong> @guilda.NivelRequerido</p>
+                        <p style="font-size: 0.95rem; color: var(--sangue-seco); font-style: italic; border-top: 1px dashed var(--tinta-fresca); padding-top: 10px;">
+                            "@guilda.Descricao"
+                        </p>
+
+                      
+                        <p><strong>Membros:</strong> @(guilda.Membros?.Count ?? 0)</p>
+                    </div>
+                </a>
+            }
+        </div>
+
+        @if (!guildasFiltradas.Any())
+        {
+            <div class="text-center mt-4">
+                <p style="color: var(--pergaminho); font-size: 1.2rem;">
+                    Nenhuma guilda encontrada com o nome "<strong>@pesquisaGuilda</strong>".
+                </p>
+            </div>
+        }
+    }
 </div>
 
 @code {
-	[Parameter]
-	public int Id { get; set; }
 
-	Guilda guildaBuscada;
-	List<Guilda> listaGuildas = new List<Guilda>();
-
+	List<Guilda> listaGuildas;
 	string pesquisaGuilda = "";
 
-	IEnumerable<Guilda> guildasFiltradas
+	private IEnumerable<Guilda> guildasFiltradas
 	{
 		get
 		{
-
 			if (string.IsNullOrWhiteSpace(pesquisaGuilda))
 				return listaGuildas;
 
@@ -59,13 +87,6 @@
 	
 	protected override async Task OnInitializedAsync()
 	{
-		if (Id != 0)
-		{
-			//guildaBuscada = await GuildaDao.BuscarGuildaPorIdAsync(Id);
-		}
-
-		listaGuildas = await GuildaDao.BuscarGuildasAsync();
+		listaGuildas = await GuildaService.ObterGuildasAsync();
 	}
-
-	
 }

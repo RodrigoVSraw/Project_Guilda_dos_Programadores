@@ -1,23 +1,24 @@
 ﻿@page "/Aventureiro/Cadastro"
 @using SistemaDeGuildas.Models
 @using SistemaDeGuildas.Services
-
+@rendermode InteractiveServer
 @inject AventureiroS AventureiroService
 
 <PageTitle>Cadastro de Aventureiro</PageTitle>
 <Banner Titulo="Cadastro de Aventureiro" Descricao="Registre seu perfil de aventureiro aqui!" />
-<div class="container main-content mt-4">
-	<EditForm Model="@novoAventureiro" OnValidSubmit="@SalvarAventureiro" >
+<div class="container main-content mt-4" style="max-width: 700px; padding-bottom: 50px;">
+	<div class="form-cadastro-card">
+	<EditForm Model="@novoAventureiro" OnValidSubmit="@SalvarAventureiro" FormName="formCadastroAventureiro">
 	
 		<div class="mb-3">
 			<label>Nome do Aventureiro: </label>
-			<InputText @bind-Value="novoAventureiro.Nome" class="form-control"/>
+			<InputText @bind-Value="nomeInserido" class="form-control"/>
 		</div>
 
 		<div class="mb-4">
 			<label>Escolha a Classe de Combate do seu Aventureiro: </label>
 			<InputSelect @bind-Value="classeInserida" class="form-control">
-				<option>Selecione uma Classe...</option>
+				<option value="">Selecione uma Classe...</option>
 				<option value="Guerreiro">Guerreiro</option>
 				<option value="Mago">Mago</option>
 				<option value="Arqueiro">Arqueiro</option>
@@ -36,13 +37,13 @@
 		<button type="submit" class="btn-acao mt-3">Registrar Aventureiro</button>
 
 	</EditForm>
+	</div>
 </div>
-
 @code {
 	
 	private string nomeInserido = "";
 	private string classeInserida = "";
-	private Aventureiro novoAventureiro = new Guerreiro("");
+	private Aventureiro novoAventureiro = new Guerreiro("Heroí");
 
 	protected async Task SalvarAventureiro()
 	{
@@ -50,6 +51,7 @@
 		{
 			return;
 		}
+
 		switch(classeInserida)
 		{
 			case "Guerreiro": novoAventureiro = new Guerreiro(nomeInserido); break;

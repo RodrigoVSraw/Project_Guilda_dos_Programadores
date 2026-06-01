@@ -1,20 +1,26 @@
 ﻿@page "/Aventureiros/Pesquisa"
-
 @using SistemaDeGuildas.Models
 @using SistemaDeGuildas.Services
-
 @inject AventureiroS AventureiroService
+@rendermode InteractiveServer
+
+<PageTitle>O Salão dos Heróis</PageTitle>
+
+<Banner Titulo="O Salão dos Heróis" Descricao="Explore os registros dos aventureiros que se alistaram no estabelecimento!" />
 
 <div>
-    <h2 style="color: var(--ouro-velho); text-align: center; margin-bottom: 20px;">O Salão dos Heróis</h2>
 
-    <div style="text-align: center; margin-bottom: 30px;">
+    
+    <div class="search-bar-container">
         <input type="text"
-               @bind="pesquisaAventureiro"
-               @bind:event="oninput"
-               class="form-control"
-               style="max-width: 400px; margin: 0 auto; background-color: var(--pergaminho); color: var(--tinta-fresca); border: 2px solid var(--pergaminho-queimado);"
-               placeholder="Buscar aventureiro por nome..." />
+                @bind="pesquisaAventureiro"
+                @bind:event="oninput"
+                class="form-control input-pesquisa"
+                placeholder="Buscar aventureiro por nome..." />
+
+        <a href="/Aventureiro/Cadastro" class="btn-acao-lateral">
+            ➕ Alistar Herói
+        </a>
     </div>
 
     @if (listaAventureiros == null)

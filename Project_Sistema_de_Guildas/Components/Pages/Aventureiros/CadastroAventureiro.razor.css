@@ -1,0 +1,119 @@
+﻿/* O quadro do contrato (Fundo do formulário) */
+.form-cadastro-card {
+    background-color: var(--pergaminho);
+    background-image: var(--textura-papel);
+    border: 3px solid var(--pergaminho-queimado);
+    border-radius: 6px;
+    box-shadow: 8px 12px 25px rgba(0,0,0,0.7);
+    padding: 40px 50px;
+    position: relative;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+    /* Labels customizadas */
+    .form-cadastro-card label {
+        color: var(--sangue-seco);
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        display: block;
+        font-family: 'Georgia', serif;
+    }
+
+/* Campos de preenchimento (Inputs e Selects) */
+.input-taverna {
+    background-color: rgba(0, 0, 0, 0.03); /* Fundo levemente mais escuro que o pergaminho */
+    color: var(--tinta-fresca);
+    border: 2px solid var(--pergaminho-queimado);
+    border-radius: 4px;
+    font-size: 1.1rem;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+}
+
+    /* Efeito de quando o usuário clica para digitar */
+    .input-taverna:focus {
+        outline: none;
+        border-color: var(--sangue-seco);
+        background-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 10px rgba(138, 25, 25, 0.2);
+    }
+
+/* A caixa de dica da classe (Anotação de rodapé) */
+.descricao-classe-box {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: var(--tinta-fresca);
+    border: 1px solid var(--pergaminho-queimado);
+    border-left: 5px solid var(--ouro-velho);
+    border-radius: 2px 6px 6px 2px;
+    padding: 15px 20px;
+    font-size: 1rem;
+    font-style: italic;
+    line-height: 1.6;
+    margin-top: 20px;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.3s ease-out;
+}
+
+    .descricao-classe-box strong {
+        color: var(--sangue-seco);
+        font-style: normal;
+        display: block;
+        margin-bottom: 5px;
+        font-size: 1.1rem;
+    }
+
+/* O Botão Gigante de Submissão */
+.btn-acao {
+    background: linear-gradient(to bottom, var(--sangue-seco), #3b0909);
+    color: var(--pergaminho);
+    border: 2px solid #2a0505;
+    border-radius: 4px;
+    padding: 15px 40px;
+    font-size: 1.3rem;
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+    .btn-acao:hover {
+        background: linear-gradient(to bottom, #8a1919, var(--sangue-seco));
+        color: var(--ouro-velho);
+        transform: translateY(-3px);
+        box-shadow: 2px 8px 15px rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-acao:active {
+        transform: translateY(1px);
+        box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+/* Animações de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

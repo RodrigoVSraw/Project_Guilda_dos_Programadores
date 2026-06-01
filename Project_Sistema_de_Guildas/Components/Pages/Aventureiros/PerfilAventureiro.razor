@@ -1,37 +1,76 @@
-﻿@page "/Aventureiro/Perfil/{Id:int}"
+﻿@page "/Aventureiros/Perfil/{Id:int}"
 @using SistemaDeGuildas.Services
 @using SistemaDeGuildas.Models
 @inject AventureiroS AventureiroService
 
 <div>
-	@if (heroi != null)
-	{
-		<h1>Ficha de Aventureiro: @heroi.Nome</h1>
-        <p>Classe: @heroi.ClasseDeCombate</p>
-        <p>Nível: @heroi.Nivel</p>
-		<p>Experiência:: @heroi.Experiencia XP</p>
-		<p>Ouro: @heroi.Ouro</p>
-
-		<h2>Atributos</h2>
-		<p>HP: @heroi.Vida</p>
-		<p>Força: @heroi.Forca</p>
-		<p>Mana: @heroi.Mana</p>	
-		<p>Stamina: @heroi.Energia</p>
-		<p>Habilidade Especial: @heroi.HabilidadeEspecial</p>
-        
-        @if (heroi.Guilda != null)
-        {
-			<a href="/Guilda/Painel/@heroi.Guilda.Id"><p>Estandarte: @heroi.Guilda.Nome (Nível @heroi.Guilda.Nivel)</p></a>
-        }
-        else
-        {
-            <p>Estandarte: Lobo Solitário</p>
-        }
+    @if (heroi == null)
+    {
+        <div class="text-center mt-5">
+            <h3 style="color: var(--ouro-velho);">Aguarde... Consultando os grandes pergaminhos...</h3>
+        </div>
     }
-	else
-	{
-		<p>Carregando...</p>
-	}
+    else
+    {  
+        <Banner Titulo="@heroi.Nome" Descricao="@($"Nível {heroi.Nivel} - {heroi.ClasseDeCombate}")" />
+
+        <div class="container main-content mt-4" style="max-width: 900px; margin: 0 auto; padding-bottom: 40px;">
+        
+            <div class="perfil-card">
+            
+                <div class="perfil-header">
+                    <h2>Ficha Oficial do Aventureiro</h2>
+                
+                    @if (heroi.Guilda != null)
+                    {
+                        <div class="guilda-badge">
+                            <span>🛡️ Estandarte:</span>
+                            <a href="/Guilda/Painel/@heroi.Guilda.Id" class="guilda-link">@heroi.Guilda.Nome (Nível @heroi.Guilda.Nivel)</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="guilda-badge solitario">
+                            <span>🐺 Lobo Solitário</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="perfil-body">
+                    <div class="status-geral">
+                        <p><strong>Experiência:</strong> @heroi.Experiencia XP</p>
+                        <p><strong>Bolsa de Ouro:</strong> <span style="color: #b88d3b; font-weight: bold;">@heroi.Ouro 💰</span></p>
+                        <p><strong>Habilidade Especial:</strong> 🌟 @heroi.HabilidadeEspecial</p>
+                    </div>
+
+                    <h3 class="atributos-title">Atributos de Combate</h3>
+                
+                    <div class="atributos-grid">
+                        <div class="atributo-box hp">
+                            <span class="icone">❤️</span>
+                            <span class="nome">Vida</span>
+                            <span class="valor">@heroi.Vida</span>
+                        </div>
+                        <div class="atributo-box forca">
+                            <span class="icone">⚔️</span>
+                            <span class="nome">Força</span>
+                            <span class="valor">@heroi.Forca</span>
+                        </div>
+                        <div class="atributo-box mana">
+                            <span class="icone">💧</span>
+                            <span class="nome">Mana</span>
+                            <span class="valor">@heroi.Mana</span>
+                        </div>
+                        <div class="atributo-box stamina">
+                            <span class="icone">⚡</span>
+                            <span class="nome">Energia</span>
+                            <span class="valor">@heroi.Energia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 @code {

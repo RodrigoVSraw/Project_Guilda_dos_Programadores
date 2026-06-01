@@ -1,0 +1,51 @@
+﻿/* O contêiner que segura a barra e o botão lado a lado */
+.search-bar-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch; /* Faz o botão e o input terem a mesma altura exata */
+    justify-content: center;
+    gap: 15px;
+    margin: 0 auto 40px auto;
+    max-width: 700px;
+    flex-wrap: nowrap; /* Proíbe de quebrar a linha e jogar o botão pra baixo */
+}
+
+/* A barra de pesquisa */
+.input-pesquisa {
+    flex-grow: 1; /* Faz a barra de texto esticar e ocupar o espaço livre */
+    background-color: var(--pergaminho);
+    color: var(--tinta-fresca);
+    border: 2px solid var(--pergaminho-queimado);
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    border-radius: 4px;
+    min-width: 0; /* Impede bugs de tamanho em telas muito pequenas */
+}
+
+/* O botão de atalho */
+.btn-acao-lateral {
+    background: linear-gradient(to bottom, var(--sangue-seco), #3b0909);
+    color: var(--pergaminho);
+    border: 2px solid #2a0505;
+    border-radius: 4px;
+    padding: 0 25px;
+    font-size: 1.1rem;
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none; /* Remove o sublinhado padrão de links */
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto; /* Anula qualquer width: 100% que ele tenha herdado */
+    white-space: nowrap; /* Garante que "Fundar Guilda" fique numa linha só */
+}
+
+    .btn-acao-lateral:hover {
+        background: linear-gradient(to bottom, #8a1919, var(--sangue-seco));
+        color: var(--ouro-velho);
+        transform: translateY(-2px);
+        box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.6);
+    }
