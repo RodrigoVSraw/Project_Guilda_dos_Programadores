@@ -12,6 +12,7 @@ namespace SistemaDeGuildas.Models
         public int Nivel { get; set; }
         public float Experiencia { get; set; }
         public Guilda Guilda { get; set; }
+        public int? IdGuilda { get; set; }
         public string ClasseDeCombate { get; set; }
         public int Vida { get; set; }   
         public int Forca { get; set; }  
@@ -21,7 +22,9 @@ namespace SistemaDeGuildas.Models
         public string HabilidadeEspecial { get; set; }
 
         protected Aventureiro() { }
-        public Aventureiro(int id, string nome, int nivel, Guilda guilda)
+
+        // Construtor para criar novo aventureiro (sem banco)
+        public Aventureiro(string nome, int nivel, Guilda guilda = null)
         {
             if(string.IsNullOrWhiteSpace(nome))
                 throw new ArgumentException("O Nome do aventureiro não pode ser nulo ou vazio.", nameof(nome));
@@ -29,11 +32,11 @@ namespace SistemaDeGuildas.Models
             if (guilda != null && nivel < guilda.NivelRequerido)
                 throw new ArgumentException($"O Nível do aventureiro deve ser pelo menos {guilda.NivelRequerido} para ingressar na guilda {guilda.Nome}.", nameof(nivel));
 
-            Id = id;
             Nome = nome;
             Cargo = "Nenhum";
-            Nivel = 1;  
+            Nivel = 1;
             Guilda = guilda;
+            IdGuilda = guilda?.Id;
             Experiencia = 0;
             Ouro = 0;
         }
@@ -82,8 +85,9 @@ namespace SistemaDeGuildas.Models
         public const int EnergiaInicialBase = 90;
 
         protected Guerreiro() { }
+
         public Guerreiro(string nome, Guilda guilda = null)
-            : base(0, nome, 1, guilda)
+            : base(nome, 1, guilda)
         {
             ClasseDeCombate = "Guerreiro";
             Forca = ForcaInicialBase;
@@ -116,7 +120,7 @@ namespace SistemaDeGuildas.Models
         protected Mago() { }
 
         public Mago(string nome, Guilda guilda = null)
-            : base(0, nome, 1, guilda)
+            : base(nome, 1, guilda)
         {
             ClasseDeCombate = "Mago";
             Forca = ForcaInicialBase;
@@ -147,8 +151,8 @@ namespace SistemaDeGuildas.Models
 
         protected Arqueiro() { }
 
-        public Arqueiro(string nome, Guilda guilda = null)
-            : base(0, nome, 1, guilda)
+        public Arqueiro(string nome,  Guilda guilda = null)
+            : base(nome, 1, guilda)
         {
             ClasseDeCombate = "Arqueiro";
             Forca = ForcaInicialBase;
@@ -180,7 +184,7 @@ namespace SistemaDeGuildas.Models
         protected Curandeiro() { }
 
         public Curandeiro(string nome, Guilda guilda = null)
-            : base(0, nome, 1, guilda)
+            : base(nome, 1, guilda)
         {
             ClasseDeCombate = "Curandeiro";
             Forca = ForcaInicialBase;

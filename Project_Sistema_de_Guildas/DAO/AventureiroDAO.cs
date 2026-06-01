@@ -20,7 +20,11 @@ namespace AventureiroDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
-                    string sql = "SELECT id, nome, cargo, classe_de_combate, nivel, experiencia, vida, forca, mana, energia, ouro, habilidade_especial FROM aventureiros";
+                    string sql = @"
+                        SELECT 
+                            id, nome, cargo, classe_de_combate, nivel, experiencia, 
+                            vida, forca, mana, energia, ouro, habilidade_especial, id_guilda
+                        FROM aventureiros";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         using (var reader = await cmd.ExecuteReaderAsync())
@@ -61,6 +65,7 @@ namespace AventureiroDATA.DAO
                                 aventureiro.Energia = reader.GetInt32(9);
                                 aventureiro.Ouro = reader.GetDecimal(10);
                                 aventureiro.HabilidadeEspecial = reader.GetString(11);
+                                aventureiro.IdGuilda = reader.IsDBNull(12) ? null : reader.GetInt32(12);
 
                                 listaAventureiros.Add(aventureiro);
 
@@ -115,10 +120,6 @@ namespace AventureiroDATA.DAO
                     }
                 }
             }
-            catch (ArgumentNullException)
-            {
-                throw;
-            }
             catch (NpgsqlException ex)
             {
                 throw new InvalidOperationException($"Erro ao adicionar aventureiro no banco de dados: {ex.Message}", ex);
@@ -136,7 +137,12 @@ namespace AventureiroDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
-                    string sql = "SELECT id, nome, cargo, classe_de_combate, nivel, experiencia, vida, forca, mana, energia, ouro, habilidade_especial FROM aventureiros WHERE id = @id";
+                    string sql = @"
+                        SELECT 
+                            id, nome, cargo, classe_de_combate, nivel, experiencia, 
+                            vida, forca, mana, energia, ouro, habilidade_especial, id_guilda
+                        FROM aventureiros 
+                        WHERE id = @id";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", id);
@@ -175,6 +181,7 @@ namespace AventureiroDATA.DAO
                                 aventureiro.Energia = reader.GetInt32(9);
                                 aventureiro.Ouro = reader.GetDecimal(10);
                                 aventureiro.HabilidadeEspecial = reader.GetString(11);
+                                aventureiro.IdGuilda = reader.IsDBNull(12) ? null : reader.GetInt32(12);
                                 return aventureiro;
                             }
                             else
@@ -184,14 +191,6 @@ namespace AventureiroDATA.DAO
                         }
                     }
                 }
-            }
-            catch (ArgumentException)
-            {
-                throw;
-            }
-            catch (KeyNotFoundException)
-            {
-                throw;
             }
             catch (NpgsqlException ex)
             {
@@ -239,18 +238,6 @@ namespace AventureiroDATA.DAO
                     }
                 }
             }
-            catch (ArgumentNullException)
-            {
-                throw;
-            }
-            catch (ArgumentException)
-            {
-                throw;
-            }
-            catch (KeyNotFoundException)
-            {
-                throw;
-            }
             catch (NpgsqlException ex)
             {
                 throw new InvalidOperationException($"Erro ao evoluir aventureiro no banco de dados: {ex.Message}", ex);
@@ -280,7 +267,7 @@ namespace AventureiroDATA.DAO
                     string sqlVerificarNivel = @"
                             SELECT 
                                 av.nivel, 
-                                g.nivel_requerido 
+                                g.nivelRequerido
                             FROM aventureiros av
                             INNER JOIN guildas g 
                                 ON g.id = @id_guilda
@@ -309,7 +296,7 @@ namespace AventureiroDATA.DAO
                     }
 
                     // Atualiza o aventureiro para associá-lo à guilda
-                    string sqlAtualizar = "UPDATE aventureiros SET guilda_id = @id_guilda WHERE id = @id_aventureiro";
+                    string sqlAtualizar = "UPDATE aventureiros SET id_guilda = @id_guilda WHERE id = @id_aventureiro";
                     using (var cmd = new NpgsqlCommand(sqlAtualizar, conn))
                     {
                         cmd.Parameters.AddWithValue("@id_guilda", idGuilda);
@@ -345,8 +332,8 @@ namespace AventureiroDATA.DAO
                     if (!temGuilda)
                         throw new InvalidOperationException("O aventureiro não está em nenhuma guilda.");
 
-                    // Remove o aventureiro da guilda (seta guilda_id como NULL)
-                    string sqlAtualizar = "UPDATE aventureiros SET guilda_id = NULL WHERE id = @id_aventureiro";
+                    // Remove o aventureiro da guilda (seta id_guilda como NULL)
+                    string sqlAtualizar = "UPDATE aventureiros SET id_guilda = NULL WHERE id = @id_aventureiro";
                     using (var cmd = new NpgsqlCommand(sqlAtualizar, conn))
                     {
                         cmd.Parameters.AddWithValue("@id_aventureiro", idAventureiro);
@@ -372,7 +359,7 @@ namespace AventureiroDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
-                    string sql = "DELETE FROM aventureiros WHERE av.id = @id_aventureiro";
+                    string sql = "DELETE FROM aventureiros WHERE id = @id_aventureiro";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@id_aventureiro", idAventureiro);
@@ -381,14 +368,6 @@ namespace AventureiroDATA.DAO
                             throw new KeyNotFoundException($"Aventureiro com ID {idAventureiro} não encontrado. Não foi possível excluir.");
                     }
                 }
-            }
-            catch (ArgumentException)
-            {
-                throw;
-            }
-            catch (KeyNotFoundException)
-            {
-                throw;
             }
             catch (NpgsqlException ex)
             {
@@ -399,7 +378,7 @@ namespace AventureiroDATA.DAO
       
         private async Task<bool> VerificarStatusGuildaAsync(NpgsqlConnection conn, int idAventureiro)
         {
-            string sql = "SELECT guilda_id FROM aventureiros WHERE id = @id_aventureiro";
+            string sql = "SELECT id_guilda FROM aventureiros WHERE id = @id_aventureiro";
             using (var cmd = new NpgsqlCommand(sql, conn))
             {
                 cmd.Parameters.AddWithValue("@id_aventureiro", idAventureiro);

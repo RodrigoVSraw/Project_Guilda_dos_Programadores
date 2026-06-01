@@ -6,7 +6,7 @@ namespace SistemaDeGuildas.Models
 {
     public abstract class Item
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Nome { get; set; }
 
@@ -22,7 +22,7 @@ namespace SistemaDeGuildas.Models
 
         protected Item() { }
 
-        public Item(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao)
+        public Item(string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao)
         {
             if(string.IsNullOrWhiteSpace(nome))
                 throw new ArgumentException("O Nome do item não pode ser nulo ou vazio.", nameof(nome));
@@ -39,7 +39,7 @@ namespace SistemaDeGuildas.Models
             if(string.IsNullOrWhiteSpace(descricao))
                 throw new ArgumentException("A Descrição do item não pode ser nula ou vazia.", nameof(descricao));
 
-            Id = id;
+         
             Nome = nome;
             NivelRequerido = nivelRequerido;
             Preco = preco;
@@ -57,8 +57,8 @@ namespace SistemaDeGuildas.Models
 
         protected Equipamento() { }
 
-        public Equipamento(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string tipoDeEquipamento, int atributos)
-            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
+        public Equipamento(string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string tipoDeEquipamento, int atributos)
+            : base(nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
         {
             if (string.IsNullOrWhiteSpace(tipoDeEquipamento))
                 throw new ArgumentException("O Tipo de Equipamento do item não pode ser nulo ou vazio.", nameof(tipoDeEquipamento));
@@ -83,8 +83,8 @@ namespace SistemaDeGuildas.Models
 
         protected Consumivel() { }
 
-        public Consumivel(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string efeito, int duracao)
-            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
+        public Consumivel(string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string efeito, int duracao)
+            : base(nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
         {
             if(string.IsNullOrWhiteSpace(efeito))
                 throw new ArgumentException("O Efeito do item não pode ser nulo ou vazio.", nameof(efeito));
@@ -103,8 +103,8 @@ namespace SistemaDeGuildas.Models
 
         protected Material() { }
 
-        public Material(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string tipoDeMaterial)
-            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
+        public Material(string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string tipoDeMaterial)
+            : base(nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
         {
             if (string.IsNullOrWhiteSpace(tipoDeMaterial))
                 throw new ArgumentException("O Tipo de Material do item não pode ser nulo ou vazio.", nameof(tipoDeMaterial));
@@ -123,8 +123,8 @@ namespace SistemaDeGuildas.Models
         public string EfeitoDeHabilidade { get; set; }
         protected Habilidade() { }
 
-        public Habilidade(string id, string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string tipoDeHabilidade, string efeitoDeHabilidade)
-            : base(id, nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
+        public Habilidade(string nome, int nivelRequerido, decimal preco, string classeRequerida, int estoque, string descricao, string tipoDeHabilidade, string efeitoDeHabilidade)
+            : base(nome, nivelRequerido, preco, classeRequerida, estoque, descricao)
         {
             if(string.IsNullOrWhiteSpace(tipoDeHabilidade))
                 throw new ArgumentException("O Poder da habilidade não pode ser nulo ou vazio.", nameof(tipoDeHabilidade));
