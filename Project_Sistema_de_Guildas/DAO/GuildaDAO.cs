@@ -19,11 +19,9 @@ namespace GuildasDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
-<<<<<<< HEAD
+
                     string sql = "SELECT id, nome, nivel, experiencia, nivelRequerido, descricao FROM guildas";
-=======
-                    string sql = "SELECT id, nome, nivel, experiencia, nivelrequerido, descricao FROM guildas";
->>>>>>> a37cfb09daeb8e0f4a4668f7370d64924ef557c3
+
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         using (var reader = await cmd.ExecuteReaderAsync())
@@ -62,11 +60,9 @@ namespace GuildasDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
-<<<<<<< HEAD
+
                     string sql = "INSERT INTO guildas (nome, nivel, experiencia, nivelRequerido, descricao) VALUES (@nome, @nivel, @experiencia_da_guilda, @nivel_requerido, @descricao) RETURNING id";
-=======
-                    string sql = "INSERT INTO guildas (nome, nivel, experiencia, nivelrequerido, descricao) VALUES (@nome, @nivel, @experiencia, @nivelrequerido, @descricao) RETURNING id";
->>>>>>> a37cfb09daeb8e0f4a4668f7370d64924ef557c3
+
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", guilda.Nome);
@@ -94,11 +90,9 @@ namespace GuildasDATA.DAO
                 using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
                 {
                     await conn.OpenAsync();
-<<<<<<< HEAD
+
                     string sql = "SELECT id, nome, nivel, experiencia, nivelRequerido, descricao FROM guildas WHERE id = @id";
-=======
-                    string sql = "SELECT id, nome, nivel, experiencia, nivelrequerido, descricao FROM guildas WHERE id = @id";
->>>>>>> a37cfb09daeb8e0f4a4668f7370d64924ef557c3
+
                     var cmd = new NpgsqlCommand(sql, conn);
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -129,7 +123,7 @@ namespace GuildasDATA.DAO
         {
             if (id <= 0)
                 throw new ArgumentOutOfRangeException("O ID da guilda deve ser um número positivo!");
-<<<<<<< HEAD
+
             if (novoNivelRequerido <= 0)
                 throw new ArgumentOutOfRangeException("O nível mínimo de uma guilda de ser pelo menos 1");
 
@@ -151,17 +145,8 @@ namespace GuildasDATA.DAO
                     }
 
                 }
-=======
-
-            if (novoNivelRequerido <= 0) 
-                throw new ArgumentOutOfRangeException("O nível mínimo de uma guilda de ser pelo menos 1");
-
-            using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
-            {
-                await conn.OpenAsync();
-                string sql = "UPDATE guildas SET nivelrequerido = @nivelrequerido WHERE id = @id_guilda";
->>>>>>> a37cfb09daeb8e0f4a4668f7370d64924ef557c3
             }
+
             catch (NpgsqlException ex)
             {
                 throw new InvalidOperationException($"Erro ao tentar atualizar o nível mínimo da guilda: {ex.Message}");
@@ -296,6 +281,29 @@ namespace GuildasDATA.DAO
                 throw new InvalidOperationException($"Erro ao consultar as missões da guilda: {ex.Message}", ex);
             }
                 
+        }
+        public async Task RemoverAventureiroDaGuilda(int id)
+        {
+            try
+            {
+                using (var conn = new NpgsqlConnection(BuilderConnection.GetConnectionString()))
+                {
+                    await conn.OpenAsync();
+                    string sql = "UPDATE aventureiros SET id_guilda = NULL WHERE id = @id";
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        int rowsAffected = await cmd.ExecuteNonQueryAsync();
+                        if (rowsAffected == 0)
+                            throw new Exception("Nenhum aventureiro encontrado com o ID fornecido.");
+                        
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new InvalidOperationException($"Erro ao remover o aventureiro da guilda: {ex.Message}");
+            }
         }
     }
 }
