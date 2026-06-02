@@ -1,6 +1,7 @@
 ﻿@page "/Guilda/Painel/{Id:int}"
 @using SistemaDeGuildas.Models
 @using SistemaDeGuildas.Services
+
 @inject GuildaS GuildaService
 @inject AventureiroS AventureiroService
 @rendermode InteractiveServer
@@ -9,12 +10,12 @@
 
 <Banner Titulo="Painel da Guilda" Descricao="Confira os detalhes e registros da guilda aqui!" />
 
-<div class="container main-content mt-4" style="max-width: 800px; padding-bottom: 50px;">
+<div class="container main-content container-painel">
 
     @if (painelG == null)
     {
         <div class="text-center mt-5">
-            <h3 style="color: var(--ouro-velho);">Aguarde... Desfraldando o estandarte da guilda...</h3>
+            <h3 class="texto-carregamento">Aguarde... Desfraldando o estandarte da guilda...</h3>
         </div>
     }
     else
@@ -48,13 +49,11 @@
                 <div class="membros-secao text-center mt-5">
                     <p class="membros-info">Esta guilda abriga <strong>@(painelG.Membros?.Count ?? 0)</strong> aventureiro(s) valente(s).</p>
 
-                    
                     <div class="botoes-acao-guilda">
                         <a href="/Guilda/Membros/@painelG.Id" class="btn-painel">
                             👥 Inspecionar Membros
                         </a>
 
-                   
                         <a href="/Guilda/Missoes/@painelG.Id" class="btn-painel">
                             📜 Quadro de Missões
                         </a>
@@ -67,11 +66,11 @@
                     @if (mostrandoFormulario)
                     {
                         <div class="formulario-inscricao mt-4">
-                            <h4 style="color: var(--sangue-seco); font-family: 'Georgia', serif; font-weight: bold;">Assinar o Livro da Guilda</h4>
-                            <p style="color: var(--tinta-fresca); margin-bottom: 15px;">Digite seu nome exato de aventureiro para se alistar:</p>
+                            <h4 class="titulo-formulario">Assinar o Livro da Guilda</h4>
+                            <p class="texto-formulario">Digite seu nome exato de aventureiro para se alistar:</p>
 
-                            <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
-                                <input type="text" @bind="nomeInscricao" class="form-control input-taverna" placeholder="Seu nome de aventureiro..." style="max-width: 250px; background-color: rgba(255,255,255,0.5); border: 2px solid var(--pergaminho-queimado);" />
+                            <div class="grupo-input-inscricao">
+                                <input type="text" @bind="nomeInscricao" class="form-control input-taverna input-inscricao" placeholder="Seu nome de aventureiro..." />
 
                                 <button class="btn-confirmar-inscricao" @onclick="ConfirmarInscricao">
                                     Assinar
@@ -80,11 +79,11 @@
 
                             @if (!string.IsNullOrEmpty(mensagemAviso))
                             {
-                                <p style="color: #8a1919; font-weight: bold; margin-top: 15px;">@mensagemAviso</p>
+                                <p class="mensagem-aviso-texto">@mensagemAviso</p>
                             }
                             @if (!string.IsNullOrEmpty(mensagemSucesso))
                             {
-                                <p style="color: #2d5a2d; font-weight: bold; margin-top: 15px;">@mensagemSucesso</p>
+                                <p class="mensagem-sucesso-texto">@mensagemSucesso</p>
                             }
                         </div>
                     }
@@ -142,18 +141,14 @@
         if (painelG.Membros == null)
             painelG.Membros = new List<Aventureiro>();
 
-        
-
         if (painelG.Membros.Any(m => m.Id == aventureiroEncontrado.Id))
         {
             mensagemAviso = "Você já faz parte desta guilda, aventureiro!";
             return;
         }
 
-        
         try
         {
-            
             await AventureiroService.EntrarEmUmaGuildaAsync(aventureiroEncontrado.Id, painelG.Id);
 
             painelG.Membros.Add(aventureiroEncontrado);
@@ -162,14 +157,11 @@
         }
         catch (InvalidOperationException ex)
         {
-            
             mensagemAviso = ex.Message;
         }
         catch (Exception)
         {
-            
             mensagemAviso = "Os registros da taverna falharam. Tente assinar o livro novamente.";
         }
-    }
     }
 }

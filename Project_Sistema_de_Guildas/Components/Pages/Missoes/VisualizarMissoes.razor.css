@@ -44,6 +44,55 @@
         transform: translateY(-2px);
     }
 
+/* --- AVISOS E ALERTAS --- */
+.mensagem-aviso {
+    background-color: rgba(138, 25, 25, 0.1);
+    color: #8a1919;
+    border: 1px dashed #8a1919;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.mensagem-sucesso {
+    background-color: rgba(45, 90, 45, 0.1);
+    color: #2d5a2d;
+    border: 1px dashed #2d5a2d;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+/* --- TEXTOS E TIPOGRAFIA --- */
+.texto-destaque-ouro {
+    color: var(--ouro-velho, #cfb53b);
+}
+
+.texto-nenhum-resultado {
+    color: var(--pergaminho, #f4e8d3);
+    font-size: 1.2rem;
+}
+
+.descricao-missao {
+    font-size: 0.95rem;
+    color: var(--sangue-seco, #8a1919);
+    font-style: italic;
+    border-bottom: 1px dashed var(--tinta-fresca, #2c3e50);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+/* --- ESTRUTURA DO CARTÃO --- */
+.cartao-missao {
+    position: relative;
+}
+
+.link-cartao-missao {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 /* --- NOVOS ESTILOS: OS CARTÕES DE AVENTUREIRO --- */
 
 /* A grade que organiza os cartões lado a lado */

@@ -3,7 +3,7 @@
 @using SistemaDeGuildas.Models
 
 @inject GuildaS GuildaService
-@inject AventureiroS AventureiroService 
+@inject AventureiroS AventureiroService
 @inject NavigationManager NavManager
 @rendermode InteractiveServer
 
@@ -11,17 +11,17 @@
 
 <Banner Titulo="Registro de Guildas" Descricao="Assine a carta de fundação e crie um novo estandarte!" />
 
-<div class="container main-content mt-4" style="max-width: 650px; padding-bottom: 50px;">
-    
+<div class="container main-content mt-4 container-cadastro-guilda">
+
     <div class="formulario-card">
-        
+
         @if (mostrarSucesso)
         {
             <div class="mensagem-sucesso text-center">
-                <div style="font-size: 4rem; margin-bottom: 15px;">👑✔️</div>
-                <h2 style="color: #2d5a2d; font-family: 'Georgia', serif;">A Guilda foi fundada!</h2>
-                <p style="font-size: 1.2rem; margin-bottom: 25px;">Salve o novo Líder! O seu estandarte já está pendurado na Taverna.</p>
-                
+                <div class="icone-sucesso">👑✔️</div>
+                <h2 class="titulo-sucesso">A Guilda foi fundada!</h2>
+                <p class="texto-sucesso">Salve o novo Líder! O seu estandarte já está pendurado na Taverna.</p>
+
                 <a href="/Guilda/Pesquisa" class="btn-taverna btn-sucesso">
                     🍻 Ir para a Taverna
                 </a>
@@ -36,9 +36,8 @@
             </div>
 
             <EditForm Model="@modeloFormulario" OnValidSubmit="SalvarGuilda" FormName="cadastroGuilda">
-                
-                @* NOVO CAMPO: O Nome do Fundador *@
-                <div class="form-group" style="background-color: rgba(90, 16, 16, 0.05); padding: 15px; border-radius: 4px; border-left: 4px solid var(--sangue-seco);">
+
+                <div class="form-group campo-destaque-fundador">
                     <label class="form-label">Assinatura do Fundador (Seu Nome):</label>
                     <InputText @bind-Value="modeloFormulario.NomeCriador" class="form-control input-taverna" placeholder="Digite seu nome exato de aventureiro..." />
                 </div>
@@ -50,7 +49,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Nível Mínimo para Recrutamento:</label>
-                    <InputNumber @bind-Value="modeloFormulario.NivelRequerido" class="form-control input-taverna" min="1" style="max-width: 150px;" />
+                    <InputNumber @bind-Value="modeloFormulario.NivelRequerido" class="form-control input-taverna input-curto" min="1" />
                 </div>
 
                 <div class="form-group">
@@ -70,7 +69,7 @@
                         🖋️ Fundar Guilda
                     </button>
                 </div>
-                
+
             </EditForm>
         }
     </div>
@@ -93,8 +92,8 @@
     {
         mensagemErro = "";
 
-        if (string.IsNullOrWhiteSpace(modeloFormulario.NomeCriador) || 
-            string.IsNullOrWhiteSpace(modeloFormulario.Nome) || 
+        if (string.IsNullOrWhiteSpace(modeloFormulario.NomeCriador) ||
+            string.IsNullOrWhiteSpace(modeloFormulario.Nome) ||
             string.IsNullOrWhiteSpace(modeloFormulario.Descricao))
         {
             mensagemErro = "O contrato exige que todos os campos sejam preenchidos!";
@@ -118,10 +117,9 @@
 
         try
         {
-          
             Guilda novaGuilda = new Guilda(modeloFormulario.Nome, modeloFormulario.NivelRequerido, modeloFormulario.Descricao);
             await GuildaService.CriarGuildaAsync(novaGuilda);
-            
+
             await AventureiroService.NomearLiderDaGuildaAsync(fundador.Id, novaGuilda.Id);
 
             mostrarSucesso = true;

@@ -1,4 +1,13 @@
-﻿/* --- O PERGAMINHO PRINCIPAL --- */
+﻿/* --- CORES VARIÁVEIS DE TEXTO --- */
+:root {
+    --madeira-pesada: #3b2f2f;
+    --sangue-seco: #8a1919;
+    --tinta-fresca: #2c3e50;
+    --pergaminho-queimado: #8b5a2b;
+    --ouro-velho: #cfb53b;
+}
+
+/* --- O PERGAMINHO PRINCIPAL --- */
 .formulario-card {
     background-color: #f4e8d3; /* Cor de pergaminho */
     background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>');
@@ -33,13 +42,107 @@
     width: 80%;
 }
 
-/* --- CORES VARIÁVEIS DE TEXTO (Caso não tenha configurado no root) --- */
-:root {
-    --madeira-pesada: #3b2f2f;
-    --sangue-seco: #8a1919;
-    --tinta-fresca: #2c3e50;
-    --pergaminho-queimado: #8b5a2b;
-    --ouro-velho: #cfb53b;
+/* --- CONTAINERS GERAIS --- */
+.texto-carregamento {
+    color: var(--ouro-velho, #cfb53b);
+}
+
+.container-detalhes {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+    margin-top: 1.5rem;
+}
+
+/* --- STATUS DA MISSÃO --- */
+.container-status-missao {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.badge-status {
+    color: white;
+    padding: 8px 15px;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    font-weight: bold;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+}
+
+.status-aberta {
+    background-color: #2d5a2d;
+}
+
+.status-andamento {
+    background-color: #8a1919;
+}
+
+/* --- RELATO E DESCRIÇÃO --- */
+.secao-relato {
+    margin-top: 30px;
+}
+
+.titulo-secao {
+    color: var(--madeira-pesada, #3b2f2f);
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.texto-relato {
+    font-size: 1.15rem;
+    color: var(--sangue-seco, #8a1919);
+    font-style: italic;
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 20px;
+    border-radius: 4px;
+    border-left: 4px solid var(--tinta-fresca, #2c3e50);
+    line-height: 1.6;
+}
+
+/* --- QUADRO DE RECOMPENSAS --- */
+.quadro-recompensas {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px dashed var(--pergaminho-queimado, #8b5a2b);
+    text-align: center;
+}
+
+.item-recompensa {
+    margin-bottom: 10px;
+}
+
+.titulo-recompensa {
+    margin-bottom: 5px;
+    color: var(--madeira-pesada, #3b2f2f);
+    font-family: 'Georgia', serif;
+}
+
+/* --- TEXTOS DE VALORES --- */
+.valor-ouro,
+.valor-xp,
+.valor-dificuldade {
+    font-size: 1.4rem;
+    font-weight: bold;
+    display: block;
+}
+
+.valor-ouro {
+    color: #b8860b;
+}
+
+.valor-xp {
+    color: #2d5a2d;
+}
+
+.valor-dificuldade {
+    color: var(--sangue-seco, #8a1919);
 }
 
 /* --- BOTÕES --- */
@@ -70,6 +173,12 @@
         box-shadow: 2px 6px 12px rgba(0,0,0,0.6);
     }
 
+/* --- AJUSTE DE LINK --- */
+.link-voltar {
+    text-decoration: none;
+}
+
+/* --- ANIMAÇÕES --- */
 /* Animação suave para a tela carregar */
 @keyframes fadeInDown {
     from {

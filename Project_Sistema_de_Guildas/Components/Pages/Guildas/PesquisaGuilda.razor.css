@@ -102,3 +102,52 @@ a {
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
+
+/* --- AVISOS E ALERTAS --- */
+.mensagem-aviso {
+    background-color: rgba(138, 25, 25, 0.1);
+    color: #8a1919;
+    border: 1px dashed #8a1919;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.mensagem-sucesso {
+    background-color: rgba(45, 90, 45, 0.1);
+    color: #2d5a2d;
+    border: 1px dashed #2d5a2d;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+/* --- TEXTOS E TIPOGRAFIA --- */
+.texto-destaque-ouro {
+    color: var(--ouro-velho, #cfb53b);
+}
+
+.texto-nenhum-resultado {
+    color: var(--pergaminho, #f4e8d3);
+    font-size: 1.2rem;
+}
+
+.descricao-guilda {
+    font-size: 0.95rem;
+    color: var(--sangue-seco, #8a1919);
+    font-style: italic;
+    border-top: 1px dashed var(--tinta-fresca, #2c3e50);
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+/* --- ESTRUTURA DO CARTÃO --- */
+.cartao-guilda {
+    position: relative;
+}
+
+.link-cartao-guilda {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}

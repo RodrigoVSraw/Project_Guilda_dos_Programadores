@@ -25,13 +25,13 @@
 
     @if (!string.IsNullOrEmpty(mensagemAviso))
     {
-        <div class="text-center mb-4" style="background-color: rgba(138, 25, 25, 0.1); color: #8a1919; border: 1px dashed #8a1919; padding: 10px; border-radius: 4px; margin-top: 15px;">
+        <div class="text-center mb-4 mensagem-aviso">
             <strong>Atenção:</strong> @mensagemAviso
         </div>
     }
     @if (!string.IsNullOrEmpty(mensagemSucesso))
     {
-        <div class="text-center mb-4" style="background-color: rgba(45, 90, 45, 0.1); color: #2d5a2d; border: 1px dashed #2d5a2d; padding: 10px; border-radius: 4px; margin-top: 15px;">
+        <div class="text-center mb-4 mensagem-sucesso">
             <strong>Sucesso:</strong> @mensagemSucesso
         </div>
     }
@@ -39,13 +39,13 @@
     @if (listaGuildas == null)
     {
         <div class="text-center mt-5">
-            <h3 style="color: var(--ouro-velho);">Aguarde... Os mensageiros estão buscando os registos das guildas.</h3>
+            <h3 class="texto-destaque-ouro">Aguarde... Os mensageiros estão buscando os registos das guildas.</h3>
         </div>
     }
     else if (listaGuildas.Count == 0)
     {
         <div class="text-center mt-5">
-            <h3 style="color: var(--ouro-velho);">Ainda não existem Guildas fundadas neste reino.</h3>
+            <h3 class="texto-destaque-ouro">Ainda não existem Guildas fundadas neste reino.</h3>
         </div>
     }
     else
@@ -53,7 +53,7 @@
         <div class="features-grid">
             @foreach (var guilda in guildasFiltradas)
             {
-                <div class="feature-box" style="position:relative">
+                <div class="feature-box cartao-guilda">
 
                     <button class="btn-deletar-cartao" title="Desfazer Guilda"
                             @onclick="() => DeletarGuilda(guilda.Id)"
@@ -61,14 +61,15 @@
                         ❌
                     </button>
 
-                    <a href="/Guilda/Painel/@guilda.Id" style="text-decoration: none; color: inherit; display: block;">
+                    <a href="/Guilda/Painel/@guilda.Id" class="link-cartao-guilda">
 
                         <div class="feature-icon">🚩</div>
                         <h3>@guilda.Nome</h3>
 
                         <p><strong>Nível da Guilda:</strong> @guilda.Nivel</p>
                         <p><strong>Nível Requerido:</strong> @guilda.NivelRequerido</p>
-                        <p style="font-size: 0.95rem; color: var(--sangue-seco); font-style: italic; border-top: 1px dashed var(--tinta-fresca); padding-top: 10px;">
+
+                        <p class="descricao-guilda">
                             "@guilda.Descricao"
                         </p>
 
@@ -81,7 +82,7 @@
         @if (!guildasFiltradas.Any())
         {
             <div class="text-center mt-4">
-                <p style="color: var(--pergaminho); font-size: 1.2rem;">
+                <p class="texto-nenhum-resultado">
                     Nenhuma guilda encontrada com o nome "<strong>@pesquisaGuilda</strong>".
                 </p>
             </div>

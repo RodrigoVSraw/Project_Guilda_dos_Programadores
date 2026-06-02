@@ -10,18 +10,18 @@
 
 <Banner Titulo="Quadro de Avisos" Descricao="Preencha um novo contrato de caçada ou resgate para os heróis da região!" />
 
-<div class="container main-content mt-4" style="max-width: 650px; padding-bottom: 50px;">
+<div class="container main-content mt-4 container-cadastro-missao">
 
     <div class="formulario-card">
 
         @if (mostrarSucesso)
         {
             <div class="mensagem-sucesso text-center">
-                <div style="font-size: 4rem; margin-bottom: 15px;">📜🗡️</div>
-                <h2 style="color: #2d5a2d; font-family: 'Georgia', serif;">Contrato Publicado!</h2>
-                <p style="font-size: 1.2rem; margin-bottom: 25px;">Sua missão foi afixada no Quadro e já pode ser aceita por aventureiros corajosos.</p>
+                <div class="icone-sucesso">📜🗡️</div>
+                <h2 class="titulo-sucesso">Contrato Publicado!</h2>
+                <p class="texto-sucesso">Sua missão foi afixada no Quadro e já pode ser aceita por aventureiros corajosos.</p>
 
-                <a href="/Missoes/Pesquisa" class="btn-taverna btn-sucesso">
+                <a href="/Missao/Pesquisa" class="btn-taverna btn-sucesso">
                     🍻 Ver Quadro de Missões
                 </a>
             </div>
@@ -46,13 +46,13 @@
                     <InputTextArea @bind-Value="modeloFormulario.Descricao" class="form-control input-taverna text-area-taverna" placeholder="Onde fica? O que deve ser feito? Quais são as feras?" rows="4" />
                 </div>
 
-                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                <div class="grupo-recompensas">
+                    <div class="form-group campo-recompensa">
                         <label class="form-label">Recompensa (Ouro 💰):</label>
                         <InputNumber @bind-Value="modeloFormulario.Ouro" class="form-control input-taverna" min="1" />
                     </div>
 
-                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                    <div class="form-group campo-recompensa">
                         <label class="form-label">Recompensa (XP 🌟):</label>
                         <InputNumber @bind-Value="modeloFormulario.Experiencia" class="form-control input-taverna" min="1" />
                     </div>
@@ -60,7 +60,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Nível Recomendado do Herói:</label>
-                    <InputNumber @bind-Value="modeloFormulario.NivelRecomendado" class="form-control input-taverna" min="1" style="max-width: 150px;" />
+                    <InputNumber @bind-Value="modeloFormulario.NivelRecomendado" class="form-control input-taverna input-curto" min="1" />
                 </div>
 
                 @if (!string.IsNullOrEmpty(mensagemErro))
@@ -86,7 +86,7 @@
     {
         public string Nome { get; set; } = "";
         public string Descricao { get; set; } = "";
-        public decimal Ouro { get; set; } = 100m; 
+        public decimal Ouro { get; set; } = 100m;
         public int Experiencia { get; set; } = 50;
         public int NivelRecomendado { get; set; } = 1;
     }
@@ -99,7 +99,6 @@
     {
         mensagemErro = "";
 
-        // Validações da Taverna
         if (string.IsNullOrWhiteSpace(modeloFormulario.Nome) || string.IsNullOrWhiteSpace(modeloFormulario.Descricao))
         {
             mensagemErro = "A missão precisa de um título e uma descrição clara!";
@@ -114,19 +113,16 @@
 
         try
         {
-            // Substitua os parâmetros se a ordem no construtor da sua classe Missao for diferente!
             Missao novaMissao = new Missao(
                 modeloFormulario.Nome,
                 modeloFormulario.Descricao,
                 modeloFormulario.Ouro,
                 modeloFormulario.Experiencia,
                 modeloFormulario.NivelRecomendado
-               
             );
 
             await MissaoService.CriarMissao(novaMissao);
 
-            // Troca o formulário pela mensagem de sucesso!
             mostrarSucesso = true;
         }
         catch (Exception ex)

@@ -112,6 +112,44 @@
         transform: translateY(-2px);
     }
 
+/* --- ESTRUTURA E CONTAINERS --- */
+.container-cadastro-missao {
+    max-width: 650px;
+    padding-bottom: 50px;
+}
+
+/* --- MENSAGEM DE SUCESSO --- */
+.icone-sucesso {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.titulo-sucesso {
+    color: #2d5a2d;
+    font-family: 'Georgia', serif;
+}
+
+.texto-sucesso {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+}
+
+/* --- LAYOUT DO FORMULÁRIO --- */
+.grupo-recompensas {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.campo-recompensa {
+    flex: 1;
+    min-width: 150px;
+}
+
+.input-curto {
+    max-width: 150px;
+}
+
 /* --- MENSAGENS DE ERRO --- */
 .mensagem-erro {
     background-color: rgba(138, 25, 25, 0.1);
@@ -122,7 +160,7 @@
     font-weight: normal;
 }
 
-/* Animação suave para a tela carregar */
+/* --- ANIMAÇÕES --- */
 @keyframes fadeInDown {
     from {
         opacity: 0;

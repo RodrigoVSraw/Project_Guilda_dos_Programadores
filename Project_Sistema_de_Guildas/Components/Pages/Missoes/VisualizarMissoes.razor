@@ -25,13 +25,13 @@
 
     @if (!string.IsNullOrEmpty(mensagemAviso))
     {
-        <div class="text-center mb-4" style="background-color: rgba(138, 25, 25, 0.1); color: #8a1919; border: 1px dashed #8a1919; padding: 10px; border-radius: 4px; margin-top: 15px;">
+        <div class="text-center mb-4 mensagem-aviso">
             <strong>Atenção:</strong> @mensagemAviso
         </div>
     }
     @if (!string.IsNullOrEmpty(mensagemSucesso))
     {
-        <div class="text-center mb-4" style="background-color: rgba(45, 90, 45, 0.1); color: #2d5a2d; border: 1px dashed #2d5a2d; padding: 10px; border-radius: 4px; margin-top: 15px;">
+        <div class="text-center mb-4 mensagem-sucesso">
             <strong>Sucesso:</strong> @mensagemSucesso
         </div>
     }
@@ -39,13 +39,13 @@
     @if (listaMissoes == null)
     {
         <div class="text-center mt-5">
-            <h3 style="color: var(--ouro-velho);">Aguarde... Os mensageiros estão buscando os registros de missões.</h3>
+            <h3 class="texto-destaque-ouro">Aguarde... Os mensageiros estão buscando os registros de missões.</h3>
         </div>
     }
     else if (listaMissoes.Count == 0)
     {
         <div class="text-center mt-5">
-            <h3 style="color: var(--ouro-velho);">Paz pelo nosso mundo! Sem missões no momento.</h3>
+            <h3 class="texto-destaque-ouro">Paz pelo nosso mundo! Sem missões no momento.</h3>
         </div>
     }
     else
@@ -53,7 +53,7 @@
         <div class="features-grid">
             @foreach (var missao in missoesFiltradas)
             {
-                <div class="feature-box" style="position:relative">
+                <div class="feature-box cartao-missao">
 
                     <button class="btn-deletar-cartao" title="Rasgar Contrato"
                             @onclick="() => DeletarMissao(missao.Id)"
@@ -61,12 +61,12 @@
                         ❌
                     </button>
 
-                    <a href="/Missoes/Detalhes/@missao.Id" style="text-decoration: none; color: inherit; display: block;">
+                    <a href="/Missoes/Detalhes/@missao.Id" class="link-cartao-missao">
 
                         <div class="feature-icon">📜</div>
                         <h3>@missao.Nome</h3>
 
-                        <p style="font-size: 0.95rem; color: var(--sangue-seco); font-style: italic; border-bottom: 1px dashed var(--tinta-fresca); padding-bottom: 10px; margin-bottom: 10px;">
+                        <p class="descricao-missao">
                             "@missao.Descricao"
                         </p>
 
@@ -81,7 +81,7 @@
         @if (!missoesFiltradas.Any())
         {
             <div class="text-center mt-4">
-                <p style="color: var(--pergaminho); font-size: 1.2rem;">
+                <p class="texto-nenhum-resultado">
                     Nenhuma missão encontrada com o nome "<strong>@pesquisaMissao</strong>".
                 </p>
             </div>

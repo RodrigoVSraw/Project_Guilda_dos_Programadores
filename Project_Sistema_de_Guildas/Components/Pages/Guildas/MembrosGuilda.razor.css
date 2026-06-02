@@ -142,3 +142,35 @@
         color: #fff;
         box-shadow: 0 0 10px rgba(255, 74, 74, 0.4);
     }
+
+/* --- ESTRUTURA --- */
+.container-membros {
+    padding-bottom: 50px;
+}
+
+/* --- TEXTOS E TIPOGRAFIA --- */
+.texto-destaque-ouro {
+    color: var(--ouro-velho, #cfb53b);
+}
+
+.texto-nenhum-resultado {
+    color: var(--pergaminho, #f4e8d3);
+    font-size: 1.2rem;
+}
+
+/* --- AVISOS E ALERTAS --- */
+.mensagem-aviso {
+    background-color: rgba(138, 25, 25, 0.1);
+    color: #8a1919;
+    border: 1px dashed #8a1919;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.mensagem-sucesso {
+    background-color: rgba(45, 90, 45, 0.1);
+    color: #2d5a2d;
+    border: 1px dashed #2d5a2d;
+    padding: 10px;
+    border-radius: 4px;
+}
