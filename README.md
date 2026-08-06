@@ -14,7 +14,8 @@ diferentes para realizar missões e conquistar prêmios para a guilda em que est
   
 ### 📸 Demonstração Visual
 
--
+**Interface Principal:**
+<img width="1600" height="781" alt="WhatsApp Image 2026-05-31 at 18 38 48" src="https://github.com/user-attachments/assets/b2c4701f-7e5a-45dd-8446-bbbc4ee24e04" />
 
 ## 🛠️ Tecnologias Utilizadas
 
